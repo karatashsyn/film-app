@@ -14,9 +14,6 @@ export default class Movie extends BaseModel {
   public title: string
 
   @column()
-  public genreId: number
-
-  @column()
   public posterPath: string
 
   @hasMany(() => MovieArtist)

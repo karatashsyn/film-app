@@ -8,7 +8,6 @@ export default class Movies extends BaseSchema {
       table.increments('id')
       table.integer('user_id').references('users.id')
       table.string('title')
-      table.integer('genre_id')
       table.string('poster_path')
     })
   }
