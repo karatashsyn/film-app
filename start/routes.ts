@@ -20,7 +20,7 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 import AuthController from 'App/Controllers/Http/AuthController'
-import GenresController from 'App/Controllers/Http/GenresController'
+// import GenresController from 'App/Controllers/Http/GenresController'
 import MoviesController from 'App/Controllers/Http/MoviesController'
 
 Route.get('/', async () => {
