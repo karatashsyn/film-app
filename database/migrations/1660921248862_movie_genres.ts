@@ -7,6 +7,7 @@ export default class MovieGenres extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('movie_id').unsigned().references('movies.id')
+
       table.integer('genre_id').unsigned().references('genres.id')
     })
   }

@@ -10,7 +10,7 @@ export default class AuthController {
       const user = new User()
       user.merge({
         email: payload.email,
-        password: payload.email,
+        password: payload.password,
       })
       await user.save()
     } catch (error) {
