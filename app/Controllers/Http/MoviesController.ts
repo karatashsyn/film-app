@@ -1,9 +1,27 @@
-// import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { movieValidator } from 'App/utils/movieValidator'
 import Movie from 'App/Models/Movie'
+import fetch from 'node-fetch'
 
 export default class MoviesController {
+  public async addMovieFromTMDBAPI({ auth }: HttpContextContract) {
+    // let movieObjectFromAPI
+    // await fetch('https://api.themoviedb.org/3/movie/551?api_key=d54de950ca880b236aa90854632983ca')
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     movieObjectFromAPI = data
+    //   })
+    // const cropedAPIObject = new Movie()
+    // cropedAPIObject.merge({
+    //   userId: auth.user!.id,
+    //   title: movieObjectFromAPI.title,
+    //   posterPath: 'https://image.tmdb.org/t/p/w500' + movieObjectFromAPI.poster_path,
+    // })
+    // await cropedAPIObject.save()
+    // return cropedAPIObject.$attributes
+  }
+
+  //CRUD OPERATIONS for Movies
   public async getMovies({ auth, request }: HttpContextContract) {
     try {
       const allMovies = await Movie.query().where('user_id', auth.user!.id)
