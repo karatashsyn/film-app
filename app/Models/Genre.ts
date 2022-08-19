@@ -6,5 +6,5 @@ export default class Genre extends BaseModel {
   public id: number
 
   @column()
-  public genreName: string
+  public name: string
 }

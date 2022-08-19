@@ -5,20 +5,21 @@ import fetch from 'node-fetch'
 
 export default class MoviesController {
   public async addMovieFromTMDBAPI({ auth }: HttpContextContract) {
-    // let movieObjectFromAPI
-    // await fetch('https://api.themoviedb.org/3/movie/551?api_key=d54de950ca880b236aa90854632983ca')
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     movieObjectFromAPI = data
-    //   })
-    // const cropedAPIObject = new Movie()
-    // cropedAPIObject.merge({
-    //   userId: auth.user!.id,
-    //   title: movieObjectFromAPI.title,
-    //   posterPath: 'https://image.tmdb.org/t/p/w500' + movieObjectFromAPI.poster_path,
-    // })
-    // await cropedAPIObject.save()
-    // return cropedAPIObject.$attributes
+    let movieObjectFromAPI
+    await fetch('https://api.themoviedb.org/3/movie/553?api_key=d54de950ca880b236aa90854632983ca')
+      .then((res) => res.json())
+      .then((data) => {
+        movieObjectFromAPI = data
+      })
+    const cropedAPIObject = new Movie()
+    cropedAPIObject.merge({
+      userId: auth.user!.id,
+      title: movieObjectFromAPI.title,
+      posterPath: 'https://image.tmdb.org/t/p/w500' + movieObjectFromAPI.poster_path,
+    })
+
+    await cropedAPIObject.save()
+    return cropedAPIObject.$attributes
   }
 
   //CRUD OPERATIONS for Movies

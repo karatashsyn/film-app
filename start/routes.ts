@@ -20,6 +20,7 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 import AuthController from 'App/Controllers/Http/AuthController'
+import GenresController from 'App/Controllers/Http/GenresController'
 import MoviesController from 'App/Controllers/Http/MoviesController'
 
 Route.get('/', async () => {
@@ -31,4 +32,5 @@ Route.post('movies', 'MoviesController.createMovie').middleware('auth')
 Route.delete('movies/:movieId', 'MoviesController.deleteMovie').middleware('auth')
 Route.get('/movies', 'MoviesController.getMovies').middleware('auth')
 Route.patch('movies/:movieId', 'MoviesController.updateMovie').middleware('auth')
-Route.get('/moviesfromapi', 'MoviesController.addMovieFromTMDBAPI').middleware('auth')
+Route.get('/moviefromapi', 'MoviesController.addMovieFromTMDBAPI').middleware('auth')
+// Route.get('/genres', 'GenresController.addGenresToMySqlDB').middleware('auth')

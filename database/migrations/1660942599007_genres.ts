@@ -5,8 +5,8 @@ export default class Genres extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
-      table.string('genre_name')
+      table.integer('id')
+      table.string('name')
     })
   }
 
