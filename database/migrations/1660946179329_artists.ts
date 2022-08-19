@@ -5,10 +5,11 @@ export default class Artists extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
-      table.string('full_name')
-      table.string('description')
-      table.string('poster_path')
+      table.integer('id').unique()
+      table.string('name')
+      table.string('biography')
+      table.string('profile_path')
+      table.string('place_of_birth')
     })
   }
 

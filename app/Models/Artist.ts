@@ -6,11 +6,14 @@ export default class Artist extends BaseModel {
   public id: number
 
   @column()
-  public fullName: string
+  public name: string
 
   @column()
-  public description: string
+  public biography: string
 
   @column()
-  public posterPath: string
+  public profilePath: string
+
+  @column()
+  public placeOfBirth: string
 }

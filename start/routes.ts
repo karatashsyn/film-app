@@ -33,4 +33,4 @@ Route.delete('movies/:movieId', 'MoviesController.deleteMovie').middleware('auth
 Route.get('/movies', 'MoviesController.getMovies').middleware('auth')
 Route.patch('movies/:movieId', 'MoviesController.updateMovie').middleware('auth')
 Route.get('/moviefromapi', 'MoviesController.addMovieFromTMDBAPI').middleware('auth')
-// Route.get('/genres', 'GenresController.addGenresToMySqlDB').middleware('auth')
+Route.get('/genres', 'GenresController.addTMDBGenresToMySqlDB').middleware('auth')

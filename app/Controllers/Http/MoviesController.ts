@@ -6,7 +6,7 @@ import fetch from 'node-fetch'
 export default class MoviesController {
   public async addMovieFromTMDBAPI({ auth }: HttpContextContract) {
     let movieObjectFromAPI
-    await fetch('https://api.themoviedb.org/3/movie/553?api_key=d54de950ca880b236aa90854632983ca')
+    await fetch('https://api.themoviedb.org/3/movie/600?api_key=d54de950ca880b236aa90854632983ca')
       .then((res) => res.json())
       .then((data) => {
         movieObjectFromAPI = data
@@ -17,7 +17,6 @@ export default class MoviesController {
       title: movieObjectFromAPI.title,
       posterPath: 'https://image.tmdb.org/t/p/w500' + movieObjectFromAPI.poster_path,
     })
-
     await cropedAPIObject.save()
     return cropedAPIObject.$attributes
   }
