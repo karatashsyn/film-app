@@ -4,20 +4,60 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: black;
+  background-color: rgb(50, 50, 50);
 }
 .nav {
-  display: inline-block;
+  display: flex;
+  justify-content: space-around;
   min-height: 70px;
   height: 8vh;
   width: 100%;
   background-color: rgb(93, 130, 184);
+  align-items: center;
+}
+.search-bar {
+  margin: 0;
+  padding: 0;
+  border-radius: 20px;
+  height: 40px;
+  min-width: 400px;
+  width: 40vw;
+  display: inline-block;
+  margin-right: 200px;
+}
+
+.nav .categories-button {
+  display: inline-block;
+  margin: 10px;
+  height: 60%;
+  width: 60px;
+  background-image: url('http://cdn.onlinewebfonts.com/svg/img_259453.png');
+  background-size: cover;
+  cursor: pointer;
+}
+
+.nav .add-movie-button {
+  display: inline-block;
+  margin: 10px;
+  height: 60%;
+  width: 60px;
+  background-image: url('https://www.freepnglogos.com/uploads/plus-icon/plus-icon-plus-svg-png-icon-download-1.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: all 2s;
+  transition-duration: 0.3s;
+}
+
+.nav .add-movie-button:hover {
+  transform: rotateX(180deg);
 }
 
 .film-container {
-  width: 100vw;
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  min-width: 100px;
 }
 
 .film-card {
