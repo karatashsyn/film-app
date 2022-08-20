@@ -47,6 +47,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "pino-pretty": "^9.0.1",
     "prettier": "^2.7.1",
+    "proxy": "^1.0.2",
     "typescript": "~4.6",
     "youch": "^3.2.0",
     "youch-terminal": "^2.1.4"
@@ -56,6 +57,9 @@
     "@adonisjs/core": "^5.8.6",
     "@adonisjs/lucid": "^10.0.0",
     "@adonisjs/repl": "^3.1.11",
+    "axios": "^0.27.2",
+    "cors": "^2.8.5",
+    "http-proxy-middleware": "^2.0.6",
     "luxon": "^3.0.1",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.1",

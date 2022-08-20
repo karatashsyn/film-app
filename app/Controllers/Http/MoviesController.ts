@@ -22,12 +22,22 @@ export default class MoviesController {
   }
 
   //CRUD OPERATIONS for Movies
-  public async getMovies({ auth, request }: HttpContextContract) {
+
+  public async getMovies({ auth, request, response }: HttpContextContract) {
     try {
-      const allMovies = await Movie.query().where('user_id', auth.user!.id)
-      return allMovies
+      const allMovies = await Movie.query().where('user_id', 1)
+      response.json(allMovies)
     } catch (err) {
-      return err
+      response.json(err)
+    }
+  }
+
+  public async getSingleMovie({ request, response }: HttpContextContract) {
+    try {
+      const movie = await Movie.find(request.param('movieId'))
+      return movie!.toJSON()
+    } catch (err) {
+      response.json(err)
     }
   }
 
