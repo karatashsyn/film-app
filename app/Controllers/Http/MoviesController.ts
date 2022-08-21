@@ -4,28 +4,48 @@ import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
 
 export default class MoviesController {
-  public async addMovieFromTMDBAPI({ auth }: HttpContextContract) {
+  public async addSingleMovieFromTMDBAPI({ auth }: HttpContextContract) {
     let movieObjectFromAPI
     await fetch('https://api.themoviedb.org/3/movie/600?api_key=d54de950ca880b236aa90854632983ca')
       .then((res) => res.json())
       .then((data) => {
         movieObjectFromAPI = data
       })
-    const cropedAPIObject = new Movie()
-    cropedAPIObject.merge({
+    const cropedMovieObject = new Movie()
+    cropedMovieObject.merge({
       userId: auth.user!.id,
       title: movieObjectFromAPI.title,
       posterPath: 'https://image.tmdb.org/t/p/w500' + movieObjectFromAPI.poster_path,
     })
-    await cropedAPIObject.save()
-    return cropedAPIObject.$attributes
+    await cropedMovieObject.save()
+    return cropedMovieObject.$attributes
+  }
+
+  public async getMoviesFromTMDBAPI({ auth }: HttpContextContract) {
+    let movies
+    await fetch(
+      'https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate'
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        movies = data.results
+      })
+    return movies
   }
 
   //CRUD OPERATIONS for Movies
 
   public async getMovies({ auth, request, response }: HttpContextContract) {
     try {
-      const allMovies = await Movie.query().where('title', 'REGEXP', '[a-zA-Z]*dogvil[a-zA-Z]*')
+      const searchString = 'gvil'
+      const allMovies = await Movie.query().where(
+        'title',
+        'REGEXP',
+        `[a-zA-Z]*${searchString}[a-zA-Z]*`
+      )
+      if (allMovies.length < 20) {
+      }
       response.json(allMovies)
     } catch (err) {
       response.json(err)
