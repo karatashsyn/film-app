@@ -7,14 +7,7 @@ import Movies from './components/Movie'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <div className="nav">
-      <div className="categories-button"></div>
-      <input className="search-bar"></input>
-      <div className="add-movie-button"></div>
-    </div>
-    <div>
-      <Movies />
-    </div>
+    <App />
   </React.StrictMode>
 )
 

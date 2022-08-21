@@ -25,7 +25,7 @@ export default class MoviesController {
 
   public async getMovies({ auth, request, response }: HttpContextContract) {
     try {
-      const allMovies = await Movie.query().where('user_id', 1)
+      const allMovies = await Movie.query().where('title', 'REGEXP', '[a-zA-Z]*dogvil[a-zA-Z]*')
       response.json(allMovies)
     } catch (err) {
       response.json(err)
