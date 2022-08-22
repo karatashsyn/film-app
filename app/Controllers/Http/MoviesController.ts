@@ -7,7 +7,7 @@ export default class MoviesController {
   public async addSingleMovieFromTMDBAPI({ request, auth }: HttpContextContract) {
     let movieObjectFromAPI
     var query = new URLSearchParams()
-    const movieName = 'There will be blood'
+    const movieName = 'fast and furious 9'
     query.append('query', movieName)
     const queryString = query.toString()
     await fetch(
@@ -45,12 +45,18 @@ export default class MoviesController {
 
   public async getMovies({ auth, request, response }: HttpContextContract) {
     try {
-      const searchString = ''
-      const allMovies = await Movie.query().where(
-        'title',
-        'REGEXP',
-        `[a-zA-Z]*${searchString}[a-zA-Z]*`
-      )
+      const searchString = request.param('search')
+      let allMovies
+      if (!searchString) {
+        allMovies = await Movie.all()
+      } else {
+        allMovies = await Movie.query().where(
+          'title',
+          'REGEXP',
+          `[a-zA-Z]*${searchString}[a-zA-Z]*`
+        )
+      }
+
       if (allMovies.length < 20) {
         //Fetch movies from TMDB API, add them into your MySql database and render them.
       }

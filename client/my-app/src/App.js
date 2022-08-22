@@ -4,27 +4,37 @@ import { useState, useEffect } from 'react'
 
 function App() {
   const [movies, setmovies] = useState([])
+  const [searchKey, setSearchKey] = useState('')
 
-  useEffect((effect) => {
-    fetch('/movies')
-      .then((res) => {
-        return res.json()
-      })
+  const fetchMovies = async (searchString) => {
+    fetch(`/movies/${searchString}`)
+      .then((res) => res.json())
       .then((data) => {
         setmovies(data)
-        console.log(data)
       })
-      .catch((err) => {
-        console.log(err)
-        return err
-      })
-  })
+  }
+
+  const searchMovies = (e) => {
+    // e.preventdefault()
+    fetchMovies(searchKey)
+  }
 
   return (
     <div className="App">
       <div className="nav">
         <div className="categories-button"></div>
-        <input className="search-bar"></input>
+        <input
+          className="search-bar"
+          type="text"
+          onChange={(e) => {
+            setSearchKey(e.target.value)
+          }}
+          onSubmit={searchMovies}
+        ></input>
+        <button type={'submit'} onClick={searchMovies}>
+          Search
+        </button>
+        <h1>{searchKey}</h1>
         <div className="add-movie-button"></div>
       </div>
       <div>
