@@ -4,24 +4,24 @@ import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
 
 export default class MoviesController {
-  public async alreadyAdded(movie: Movie) {
+  public async alreadyAdded(movie): Promise<boolean> {
     const targetMovie = await Movie.findBy('tmdb_id', movie.tmdbId)
+
     if (targetMovie) {
       return true
-    }
-    return false
-  }
-
-  //Works correctly
-  public async exactMatchINDB(title) {
-    if (!(await Movie.findBy('title', title))) {
-      console.log('not exact match')
+    } else {
+      console.log('This is not added')
 
       return false
     }
+  }
 
-    console.log('exact match')
-
+  //Works correctly
+  public exactMatchINDB = async (title) => {
+    const targetMovie = await Movie.findBy('title', title)
+    if (!targetMovie) {
+      return false
+    }
     return true
   }
 
@@ -29,7 +29,7 @@ export default class MoviesController {
     let TMDbMovie
 
     await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query=prey`
+      `https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query=${queryString}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -43,16 +43,17 @@ export default class MoviesController {
         tmdbId: TMDbMovie.id,
         posterPath: 'https://image.tmdb.org/t/p/w500' + TMDbMovie.poster_path,
       })
-      if (!this.alreadyAdded(movieToBeAdded)) {
+
+      if (await this.alreadyAdded(movieToBeAdded)) {
+        //ALWAYS RETURNS TRUE????? WHY
+        console.log('You already have that filmmmm')
+        return { message: 'You already have that film' }
+      } else {
         await movieToBeAdded.save()
         return movieToBeAdded.$attributes
-      } else {
-        console.log('You already have that film')
-        return { message: 'You already have that film' }
       }
     } else {
       console.log('There is no such movie')
-
       return { message: 'There is no such movie' }
     }
   }
@@ -75,17 +76,25 @@ export default class MoviesController {
 
   public async getMovies({ auth, request, response }: HttpContextContract) {
     try {
-      const searchString: string = request.param('search')
-        ? request.param('search').replace('+', ' ')
-        : ''
-      console.log(searchString)
+      const queryString = request.param('search')
+      const searchString: string = queryString ? queryString.split('+').join(' ') : ''
+
+      console.log(' First Search String: ' + searchString)
+
+      console.log('queryString: ' + queryString)
+      console.log('searchString: ' + searchString)
 
       //Check if there is the movie with the exact search string in our database. If not, go to TMDB and try to fetch. If does not exist there either, Do nothing
 
       let allMovies
-      if (!this.exactMatchINDB(searchString)) {
-        console.log('not exact match')
-        this.addSingleMovieFromTMDB(searchString.replace(' ', '+'))
+      console.log('------------------------------------------')
+      let isMatching = await this.exactMatchINDB(searchString)
+      console.log(isMatching)
+      if (!isMatching) {
+        console.log('notttt exact match')
+        this.addSingleMovieFromTMDB(queryString).then((res) => {
+          return res
+        })
       }
 
       allMovies = await Movie.query().where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
