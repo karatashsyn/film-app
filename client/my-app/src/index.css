@@ -56,12 +56,12 @@ body {
 .film-container {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   min-width: 100px;
 }
 
 .film-card {
-  max-width: 280px;
+  max-width: 200px;
   height: auto;
   margin: auto;
   margin-top: 40px;
