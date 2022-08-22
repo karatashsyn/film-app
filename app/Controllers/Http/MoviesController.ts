@@ -4,30 +4,60 @@ import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
 
 export default class MoviesController {
-  public async addSingleMovieFromTMDBAPI({ request, auth }: HttpContextContract) {
-    let movieObjectFromAPI
-    var query = new URLSearchParams()
-    const movieName = 'fast and furious 9'
-    query.append('query', movieName)
-    const queryString = query.toString()
+  public async alreadyAdded(movie: Movie) {
+    const targetMovie = await Movie.findBy('tmdb_id', movie.tmdbId)
+    if (targetMovie) {
+      return true
+    }
+    return false
+  }
+
+  //Works correctly
+  public async exactMatchINDB(title) {
+    if (!(await Movie.findBy('title', title))) {
+      console.log('not exact match')
+
+      return false
+    }
+
+    console.log('exact match')
+
+    return true
+  }
+
+  public async addSingleMovieFromTMDB(queryString) {
+    let TMDbMovie
+
     await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&${queryString}`
+      `https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query=prey`
     )
       .then((res) => res.json())
       .then((data) => {
-        movieObjectFromAPI = data.results[0]
+        TMDbMovie = data.results[0]
       })
-    const cropedMovieObject = new Movie()
-    cropedMovieObject.merge({
-      userId: auth.user!.id,
-      title: movieObjectFromAPI.title,
-      posterPath: 'https://image.tmdb.org/t/p/w500' + movieObjectFromAPI.poster_path,
-    })
-    await cropedMovieObject.save()
-    return cropedMovieObject.$attributes
+    const movieToBeAdded = new Movie()
+
+    if (TMDbMovie) {
+      movieToBeAdded.merge({
+        title: TMDbMovie.title,
+        tmdbId: TMDbMovie.id,
+        posterPath: 'https://image.tmdb.org/t/p/w500' + TMDbMovie.poster_path,
+      })
+      if (!this.alreadyAdded(movieToBeAdded)) {
+        await movieToBeAdded.save()
+        return movieToBeAdded.$attributes
+      } else {
+        console.log('You already have that film')
+        return { message: 'You already have that film' }
+      }
+    } else {
+      console.log('There is no such movie')
+
+      return { message: 'There is no such movie' }
+    }
   }
 
-  public async getMoviesFromTMDBAPI({ auth }: HttpContextContract) {
+  public async getMoviesFromTMDBAPI() {
     //Most 20 popular movie
     let movies
     await fetch(
@@ -45,21 +75,21 @@ export default class MoviesController {
 
   public async getMovies({ auth, request, response }: HttpContextContract) {
     try {
-      const searchString = request.param('search')
+      const searchString: string = request.param('search')
+        ? request.param('search').replace('+', ' ')
+        : ''
+      console.log(searchString)
+
+      //Check if there is the movie with the exact search string in our database. If not, go to TMDB and try to fetch. If does not exist there either, Do nothing
+
       let allMovies
-      if (!searchString) {
-        allMovies = await Movie.all()
-      } else {
-        allMovies = await Movie.query().where(
-          'title',
-          'REGEXP',
-          `[a-zA-Z]*${searchString}[a-zA-Z]*`
-        )
+      if (!this.exactMatchINDB(searchString)) {
+        console.log('not exact match')
+        this.addSingleMovieFromTMDB(searchString.replace(' ', '+'))
       }
 
-      if (allMovies.length < 20) {
-        //Fetch movies from TMDB API, add them into your MySql database and render them.
-      }
+      allMovies = await Movie.query().where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
+
       response.json(allMovies)
     } catch (err) {
       response.json(err)
@@ -81,7 +111,6 @@ export default class MoviesController {
       const payload = await request.validate({ schema: movieValidator.movieSchema })
       const movie = new Movie()
       movie.merge({
-        userId: auth.user!.id,
         title: payload.title,
         posterPath: payload.posterPath,
       })

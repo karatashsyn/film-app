@@ -16,7 +16,8 @@ function App() {
 
   const searchMovies = (e) => {
     // e.preventdefault()
-    fetchMovies(searchKey)
+    fetchMovies(searchKey.replace(' ', '+'))
+    console.log(searchKey.replace(' ', '+'))
   }
 
   return (
@@ -31,9 +32,7 @@ function App() {
           }}
           onSubmit={searchMovies}
         ></input>
-        <button type={'submit'} onClick={searchMovies}>
-          Search
-        </button>
+        <button onClick={searchMovies}>Search</button>
         <h1>{searchKey}</h1>
         <div className="add-movie-button"></div>
       </div>

@@ -8,7 +8,7 @@ export default class Movie extends BaseModel {
   public id: number
 
   @column()
-  public userId: number
+  public tmdbId: number
 
   @column()
   public title: string

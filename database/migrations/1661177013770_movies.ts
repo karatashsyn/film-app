@@ -6,7 +6,7 @@ export default class Movies extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('user_id')
+      table.integer('tmdb_id')
       table.string('title')
       table.string('poster_path')
     })
