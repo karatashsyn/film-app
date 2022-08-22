@@ -6,8 +6,9 @@ import fetch from 'node-fetch'
 export default class MoviesController {
   public async alreadyAdded(movie): Promise<boolean> {
     const targetMovie = await Movie.findBy('tmdb_id', movie.tmdbId)
-
     if (targetMovie) {
+      console.log('You already have a movie with the same TMDB id ')
+
       return true
     } else {
       console.log('This is not added')
@@ -20,8 +21,11 @@ export default class MoviesController {
   public exactMatchINDB = async (title) => {
     const targetMovie = await Movie.findBy('title', title)
     if (!targetMovie) {
+      console.log('No Match')
+
       return false
     }
+    console.log('exact match')
     return true
   }
 
@@ -36,17 +40,17 @@ export default class MoviesController {
         TMDbMovie = data.results[0]
       })
     const movieToBeAdded = new Movie()
-
     if (TMDbMovie) {
       movieToBeAdded.merge({
         title: TMDbMovie.title,
         tmdbId: TMDbMovie.id,
         posterPath: 'https://image.tmdb.org/t/p/w500' + TMDbMovie.poster_path,
       })
-
+      //We said that as a result of not finding exact match, we should go to the TMDB and discover the closest match by the search string
+      //But it is possible to add same film. For instance, Let us assume that we have 'dark blood' in our DB. And we typed 'dark blo'.
+      //Since there is not exact matc, backend will try to find a movie on tmdb (Which will be dark blood in this case) and try to push it into our DB.
+      // In order to prevent duplicate films, we check the tmdb_id of the film we are trying to add
       if (await this.alreadyAdded(movieToBeAdded)) {
-        //ALWAYS RETURNS TRUE????? WHY
-        console.log('You already have that filmmmm')
         return { message: 'You already have that film' }
       } else {
         await movieToBeAdded.save()
@@ -79,22 +83,13 @@ export default class MoviesController {
       const queryString = request.param('search')
       const searchString: string = queryString ? queryString.split('+').join(' ') : ''
 
-      console.log(' First Search String: ' + searchString)
-
-      console.log('queryString: ' + queryString)
-      console.log('searchString: ' + searchString)
-
       //Check if there is the movie with the exact search string in our database. If not, go to TMDB and try to fetch. If does not exist there either, Do nothing
 
       let allMovies
-      console.log('------------------------------------------')
       let isMatching = await this.exactMatchINDB(searchString)
       console.log(isMatching)
       if (!isMatching) {
-        console.log('notttt exact match')
-        this.addSingleMovieFromTMDB(queryString).then((res) => {
-          return res
-        })
+        await this.addSingleMovieFromTMDB(queryString)
       }
 
       allMovies = await Movie.query().where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
