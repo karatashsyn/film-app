@@ -31,19 +31,22 @@ export default class MoviesController {
 
   public async addSingleMovieFromTMDB(queryString) {
     let TMDbMovie
+    if (queryString) {
+      await fetch(
+        `https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query=${queryString}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          TMDbMovie = data.results[0]
+        })
+    }
 
-    await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query=${queryString}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        TMDbMovie = data.results[0]
-      })
     const movieToBeAdded = new Movie()
     if (TMDbMovie) {
       movieToBeAdded.merge({
         title: TMDbMovie.title,
         tmdbId: TMDbMovie.id,
+        description: TMDbMovie.overview,
         posterPath: 'https://image.tmdb.org/t/p/w500' + TMDbMovie.poster_path,
       })
       //We said that as a result of not finding exact match, we should go to the TMDB and discover the closest match by the search string
@@ -119,6 +122,7 @@ export default class MoviesController {
       movie.merge({
         title: payload.title,
         posterPath: payload.posterPath,
+        description: payload.description,
       })
       await movie.save()
     } catch (err) {
@@ -144,6 +148,7 @@ export default class MoviesController {
       movieToBeUpdated!.merge({
         title: payload.title,
         posterPath: payload.posterPath,
+        description: payload.description,
       })
 
       movieToBeUpdated!.save()

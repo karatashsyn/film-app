@@ -8,6 +8,7 @@ export default class Movies extends BaseSchema {
       table.increments('id')
       table.integer('tmdb_id')
       table.string('title')
+      table.string('description')
       table.string('poster_path')
     })
   }

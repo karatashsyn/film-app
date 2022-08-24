@@ -27,12 +27,12 @@ function Details() {
     const title = document.querySelector('.title')
     const descirption = document.querySelector('.description-text')
     console.log(title.getAttribute('readonly'))
-    if (!title.getAttribute('readonly')) {
-      title.setAttribute('readonly', true)
-      descirption.setAttribute('readonly', true)
+    if (!title.readOnly === true) {
+      title.readOnly = true
+      descirption.readOnly = true
     } else {
-      title.removeAttribute('readonly')
-      descirption.removeAttribute('readonly')
+      title.readOnly = false
+      descirption.readOnly = false
     }
 
     title.focus()
@@ -48,6 +48,7 @@ function Details() {
             <div className="except-cast">
               <div className="first-row">
                 <input
+                  readOnly={true}
                   onChange={(e) => {
                     setTitle(e.target.value)
                     console.log(e.target.value)
@@ -64,22 +65,11 @@ function Details() {
               </div>
               <div className="genres">Adventure, Horror</div>
               <div className="description-block">
-                <p className="description-text">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellendus, repellat
-                  facilis. Sapiente unde autem at, fuga modi qui fugiat ipsam laboriosam aspernatur
-                  eaque ullam. Rerum voluptatum error libero reprehenderit quibusdam? Lorem, ipsum
-                  dolor sit amet consectetur adipisicing elit. Repellendus, repellat facilis.
-                  Sapiente unde autem at, fuga modi qui fugiat ipsam laboriosam aspernatur eaque
-                  ullam. Rerum voluptatum error libero reprehenderit quibusdam?adipisicing elit.
-                  Repellendus, repellat facilis. Sapiente unde autem at, fuga modi qui fugiat ipsam
-                  laboriosam aspernatur eaque ullam. Rerum voluptatum error libero reprehenderit
-                  quibusdam?m laboriosam aspernatur eaque ullam. Rerum voluptatum error libero
-                  reprehenderit quibusdam?adipisicing elit. Repellendus, repellat facilis. Sapiente
-                  unde autem at, fuga modi qui fugiat ipsam laboriosam aspernatur eaque ullam. Rerum
-                  voluptatum error libero reprehenderit quibusdam?m laboriosam aspernatur eaque
-                  ullam. Rerum voluptatum error libero reprehenderit quibusdam?adipisicing elit.
-                  Repellendus, repellat facilis. Sapiente unde autem at, fuga
-                </p>
+                <textarea
+                  spellCheck="false"
+                  className="description-text"
+                  value={currentMovie.description}
+                />
               </div>
             </div>
             <div className="cast">
