@@ -5,7 +5,10 @@ import axios from 'axios'
 function Details() {
   const [currentMovie, setCurrentMovie] = useState({})
   const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const currentMovieId = useParams().movieId
+  const [editMode, setEditMode] = useState(false)
+  const [posterPath, setPosterPath] = useState()
 
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
@@ -13,6 +16,8 @@ function Details() {
       .then((data) => {
         setCurrentMovie(data)
         setTitle(data.title)
+        setDescription(data.description)
+        setPosterPath(data.poster_path)
       })
       .catch((err) => {
         console.log(err)
@@ -25,17 +30,52 @@ function Details() {
 
   function changeReadonly() {
     const title = document.querySelector('.title')
-    const descirption = document.querySelector('.description-text')
+    const description = document.querySelector('.description-text')
     console.log(title.getAttribute('readonly'))
     if (!title.readOnly === true) {
       title.readOnly = true
-      descirption.readOnly = true
+      description.readOnly = true
     } else {
       title.readOnly = false
-      descirption.readOnly = false
+      description.readOnly = false
     }
 
     title.focus()
+  }
+  function updateMovie() {
+    axios.patch(`/movies/${currentMovieId}`, {
+      title: title,
+      description: description,
+      posterPath: posterPath,
+    })
+  }
+
+  function deleteMovie() {
+    axios.delete(`/movies/${currentMovieId}`)
+  }
+
+  function switchBetweenEditAndSave() {
+    const editBtn = document.querySelector('.edit-btn')
+    const deleteBtn = document.querySelector('.delete-btn')
+    const addArtistBtn = document.querySelector('.add-artist')
+    if (editMode === true) {
+      setEditMode(false)
+      editBtn.classList.remove('save-btn')
+      editBtn.innerHTML = 'Edit'
+      deleteBtn.classList.toggle('inactive-delete-movie')
+      addArtistBtn.classList.toggle('hidden-add-btn')
+      updateMovie()
+    } else {
+      setEditMode(true)
+      editBtn.classList.toggle('save-btn')
+      editBtn.innerHTML = 'Save'
+      deleteBtn.classList.remove('inactive-delete-movie')
+      addArtistBtn.classList.remove('hidden-add-btn')
+    }
+  }
+  function editBtnFunctions() {
+    changeReadonly()
+    switchBetweenEditAndSave()
   }
 
   return (
@@ -55,20 +95,26 @@ function Details() {
                   }}
                   className="title"
                   value={title}
+                  spellCheck="false"
                 />
                 <div className="buttons">
-                  <div onClick={changeReadonly} className="edit-btn">
+                  <div onClick={editBtnFunctions} className="edit-btn">
                     Edit
                   </div>
-                  <div className="delete-btn"></div>
+
+                  <div onClick={deleteMovie} className="delete-btn inactive-delete-movie"></div>
                 </div>
               </div>
               <div className="genres">Adventure, Horror</div>
               <div className="description-block">
                 <textarea
+                  onChange={(e) => {
+                    setDescription(e.target.value)
+                  }}
+                  readOnly={true}
                   spellCheck="false"
                   className="description-text"
-                  value={currentMovie.description}
+                  value={description}
                 />
               </div>
             </div>
@@ -77,30 +123,13 @@ function Details() {
                 <div className="artist-photo"></div>
                 <p className="artist-name">Some Actor</p>
               </div>
-
               <div className="artist">
                 <div className="artist-photo"></div>
                 <p className="artist-name">Some Actor</p>
               </div>
-              <div className="artist">
+              <div className="artist add-artist hidden-add-btn">
                 <div className="artist-photo"></div>
-                <p className="artist-name">Some Actor</p>
-              </div>
-              <div className="artist">
-                <div className="artist-photo"></div>
-                <p className="artist-name">Some Actor</p>
-              </div>
-              <div className="artist">
-                <div className="artist-photo"></div>
-                <p className="artist-name">Some Actor</p>
-              </div>
-              <div className="artist">
-                <div className="artist-photo"></div>
-                <p className="artist-name">Some Actor</p>
-              </div>
-              <div className="artist">
-                <div className="artist-photo"></div>
-                <p className="artist-name">Some Actor</p>
+                <p className="artist-name"> ADD </p>
               </div>
             </div>
           </div>
