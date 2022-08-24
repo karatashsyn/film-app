@@ -12,19 +12,20 @@ function Home() {
     fetch(`/movies/${searchString}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         setmovies(data)
       })
   }
-  const fetchGenres = async () => {
+
+  const fetcGenres = async () => {
     fetch('/genres')
       .then((res) => res.json())
       .then((data) => {
         setCategories(data)
       })
   }
-
   useEffect(() => {
-    fetchGenres()
+    fetcGenres()
     fetchMovies(searchKey)
   }, [])
 
@@ -32,11 +33,14 @@ function Home() {
     fetchMovies(searchKey.replace(' ', '+'))
     console.log(searchKey.replace(' ', '+'))
   }
-  const categoriesList = document.querySelector('.categories')
+
   const showCategories = () => {
+    const categoriesList = document.querySelector('.categories')
     categoriesList.classList.toggle('active')
   }
   const hideCategories = () => {
+    const categoriesList = document.querySelector('.categories')
+
     categoriesList.classList.remove('active')
   }
   return (

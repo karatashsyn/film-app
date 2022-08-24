@@ -90,6 +90,18 @@ function Details() {
                 <div className="artist-photo"></div>
                 <p className="artist-name">Some Actor</p>
               </div>
+              <div className="artist">
+                <div className="artist-photo"></div>
+                <p className="artist-name">Some Actor</p>
+              </div>
+              <div className="artist">
+                <div className="artist-photo"></div>
+                <p className="artist-name">Some Actor</p>
+              </div>
+              <div className="artist">
+                <div className="artist-photo"></div>
+                <p className="artist-name">Some Actor</p>
+              </div>
             </div>
           </div>
         </div>

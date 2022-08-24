@@ -56,6 +56,8 @@ export default class MoviesController {
       if (await this.alreadyAdded(movieToBeAdded)) {
         return { message: 'You already have that film' }
       } else {
+        console.log(movieToBeAdded.$attributes)
+
         await movieToBeAdded.save()
         return movieToBeAdded.$attributes
       }
