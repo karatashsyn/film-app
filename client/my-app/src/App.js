@@ -1,45 +1,18 @@
-import './App.css'
 import Movies from './components/Movie'
+import Home from './pages/Home'
+import Details from './pages/Details'
 import { useState, useEffect } from 'react'
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 function App() {
-  const [movies, setmovies] = useState([])
-  const [searchKey, setSearchKey] = useState('')
-
-  const fetchMovies = async (searchString) => {
-    fetch(`/movies/${searchString}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setmovies(data)
-      })
-  }
-
-  const searchMovies = (e) => {
-    // e.preventdefault()
-    fetchMovies(searchKey.replace(' ', '+'))
-    console.log(searchKey.replace(' ', '+'))
-  }
-
   return (
-    <div className="App">
-      <div className="nav">
-        <div className="categories-button"></div>
-        <input
-          className="search-bar"
-          type="text"
-          onChange={(e) => {
-            setSearchKey(e.target.value)
-          }}
-          onSubmit={searchMovies}
-        ></input>
-        <button onClick={searchMovies}>Search</button>
-        <h1>{searchKey}</h1>
-        <div className="add-movie-button"></div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/details/:movieId" element={<Details />}></Route>
+        </Routes>
       </div>
-      <div>
-        <Movies movies={movies} />
-      </div>
-    </div>
+    </Router>
   )
 }
 

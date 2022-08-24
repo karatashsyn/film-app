@@ -18,4 +18,9 @@ export default class GenresController {
       await newGenre.save()
     })
   }
+
+  public async getGenres() {
+    const genres = await Genre.all()
+    return genres
+  }
 }

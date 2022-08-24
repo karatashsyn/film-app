@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import { NavLink, Link, useParams, useLocation } from 'react-router-dom'
 
 function Movies(props) {
   return (
     <div>
       <div className="film-container">
         {props.movies.map((m) => (
-          <div className="film-card">
+          <Link to={{ pathname: `/details/${m.id}`, state: { movie: m } }} className="film-card">
             <img src={m.poster_path}></img>
             <h2 key={m.id}>{m.title}</h2>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

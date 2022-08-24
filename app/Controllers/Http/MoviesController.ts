@@ -78,7 +78,7 @@ export default class MoviesController {
 
   //CRUD OPERATIONS for Movies
 
-  public async getMovies({ auth, request, response }: HttpContextContract) {
+  public async getMovies({ request, response }: HttpContextContract) {
     try {
       const queryString = request.param('search')
       const searchString: string = queryString ? queryString.split('+').join(' ') : ''
@@ -100,11 +100,11 @@ export default class MoviesController {
     }
   }
 
-  //I'll use this to show the details of the clicked movie
+  //I'll use this to show the details of the clicked movie (NOT A GOOD PRACTISE)
   public async getSingleMovie({ request, response }: HttpContextContract) {
     try {
       const movie = await Movie.find(request.param('movieId'))
-      return movie!.toJSON()
+      response.json(movie)
     } catch (err) {
       response.json(err)
     }

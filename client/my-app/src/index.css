@@ -4,15 +4,16 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(50, 50, 50);
+  background-color: rgb(12, 12, 12);
 }
 .nav {
+  z-index: 1;
   display: flex;
   justify-content: space-around;
-  min-height: 70px;
-  height: 8vh;
+  height: 6vh;
+  /* min-height: 70px; */
   width: 100%;
-  background-color: rgb(93, 130, 184);
+  background-color: rgb(53, 53, 53);
   align-items: center;
 }
 .search-bar {
@@ -23,17 +24,52 @@ body {
   min-width: 400px;
   width: 40vw;
   display: inline-block;
-  margin-right: 200px;
+  margin-right: 20px;
+  border-style: none;
 }
 
 .nav .categories-button {
-  display: inline-block;
+  display: flex;
   margin: 10px;
-  height: 60%;
-  width: 60px;
-  background-image: url('http://cdn.onlinewebfonts.com/svg/img_259453.png');
-  background-size: cover;
+  height: 100%;
+  width: min-content;
+  padding: 0 20px 2px 20px;
+  background-color: aqua;
   cursor: pointer;
+  align-items: center;
+}
+
+.categories {
+  z-index: 1;
+  position: absolute;
+  width: 300px;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.categories div {
+  height: 30px;
+  background-color: rgb(48, 48, 48);
+  backdrop-filter: blur(20px);
+  border: 1px solid black;
+  text-align: center;
+  font-weight: 300;
+  cursor: pointer;
+  color: white;
+  transition: all 0.1s;
+  font-weight: 500;
+}
+
+.categories div:hover {
+  background-color: rgb(255, 244, 244);
+  color: black;
+}
+.active {
+  height: 620px;
+}
+.nav .categories-button:hover .categories {
+  min-height: 200px;
 }
 
 .nav .add-movie-button {
@@ -69,11 +105,12 @@ body {
   flex-direction: column;
   transition: all 3s;
   cursor: pointer;
-  border-radius: 40px;
   text-align: center;
+  text-decoration: none;
 }
 
 img {
+  /* max-width: 200px; */
   transition: all 0.2s;
   overflow: hidden;
 }
