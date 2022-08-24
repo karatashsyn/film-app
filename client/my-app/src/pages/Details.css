@@ -25,7 +25,6 @@ body {
   right: 0;
   width: 100%;
   height: 400px;
-  background-image: url(./Greta\ Poster.jpg);
   filter: blur(200px);
 }
 .main-container {
@@ -44,7 +43,6 @@ body {
   height: calc(background-image);
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url('./Greta\ Poster.jpg');
 }
 
 .info-container {
@@ -150,4 +148,6 @@ body {
   height: 90%;
   background-image: url('./chloe-grace-moretz-1.jpg');
   background-size: cover;
+}
+.fake-body {
 }
