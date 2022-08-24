@@ -4,6 +4,7 @@ import axios from 'axios'
 
 function Details() {
   const [currentMovie, setCurrentMovie] = useState({})
+  const [title, setTitle] = useState('')
   const currentMovieId = useParams().movieId
 
   const fetchMovie = async () => {
@@ -11,17 +12,32 @@ function Details() {
       .then((res) => res.json())
       .then((data) => {
         setCurrentMovie(data)
+        setTitle(data.title)
       })
       .catch((err) => {
         console.log(err)
       })
   }
+
   useEffect(() => {
     fetchMovie()
-  })
+  }, [])
 
-  console.log(currentMovieId)
-  console.log(currentMovie)
+  function changeReadonly() {
+    const title = document.querySelector('.title')
+    const descirption = document.querySelector('.description-text')
+    console.log(title.getAttribute('readonly'))
+    if (!title.getAttribute('readonly')) {
+      title.setAttribute('readonly', true)
+      descirption.setAttribute('readonly', true)
+    } else {
+      title.removeAttribute('readonly')
+      descirption.removeAttribute('readonly')
+    }
+
+    title.focus()
+  }
+
   return (
     <>
       <div className="fake-details-body">
@@ -31,9 +47,18 @@ function Details() {
           <div className="info-container">
             <div className="except-cast">
               <div className="first-row">
-                <p className="title">{currentMovie.title}</p>
+                <input
+                  onChange={(e) => {
+                    setTitle(e.target.value)
+                    console.log(e.target.value)
+                  }}
+                  className="title"
+                  value={title}
+                />
                 <div className="buttons">
-                  <div className="edit-btn">Edit</div>
+                  <div onClick={changeReadonly} className="edit-btn">
+                    Edit
+                  </div>
                   <div className="delete-btn"></div>
                 </div>
               </div>
@@ -63,6 +88,14 @@ function Details() {
                 <p className="artist-name">Some Actor</p>
               </div>
 
+              <div className="artist">
+                <div className="artist-photo"></div>
+                <p className="artist-name">Some Actor</p>
+              </div>
+              <div className="artist">
+                <div className="artist-photo"></div>
+                <p className="artist-name">Some Actor</p>
+              </div>
               <div className="artist">
                 <div className="artist-photo"></div>
                 <p className="artist-name">Some Actor</p>

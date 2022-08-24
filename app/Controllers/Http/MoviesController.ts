@@ -79,13 +79,15 @@ export default class MoviesController {
   //CRUD OPERATIONS for Movies
 
   public async getMovies({ request, response }: HttpContextContract) {
+    let allMovies
     try {
+      if (request.param('categoryId')) {
+        // MovieCategory tablosundan category id si 'categoryId' ile es olanlari alip movieleri preloadla.
+      }
       const queryString = request.param('search')
       const searchString: string = queryString ? queryString.split('+').join(' ') : ''
-
       //Check if there is the movie with the exact search string in our database. If not, go to TMDB and try to fetch. If does not exist there either, Do nothing
 
-      let allMovies
       let isMatching = await this.exactMatchINDB(searchString)
       console.log(isMatching)
       if (!isMatching) {

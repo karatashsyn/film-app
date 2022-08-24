@@ -9,7 +9,7 @@
 body {
   box-sizing: border-box;
   width: 100vw;
-  height: 720px;
+  height: 100vh;
   padding: 30px;
   position: fixed;
 
@@ -71,6 +71,10 @@ body {
   position: relative;
   font-size: 44px;
   top: 0;
+  background: rgba(0, 0, 0, 0);
+  border-style: none;
+  /* opacity: 0.5; */
+  color: white;
 }
 .buttons {
   font-size: 20px;
@@ -148,6 +152,4 @@ body {
   height: 90%;
   background-image: url('./chloe-grace-moretz-1.jpg');
   background-size: cover;
-}
-.fake-body {
 }

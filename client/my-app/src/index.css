@@ -157,7 +157,7 @@ h2 {
 .poster {
   width: 32%;
   min-width: 300px;
-  height: calc(background-image);
+  height: auto;
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -185,8 +185,14 @@ h2 {
   height: 20%;
 }
 .title {
+  width: 70%;
+  border-style: none;
+  outline: none;
+  background: rgba(0, 0, 0, 0);
+  color: white;
   position: relative;
   font-size: 44px;
+  text-overflow: ellipsis;
   top: 0;
 }
 .buttons {
@@ -237,12 +243,24 @@ h2 {
   display: flex;
   flex-direction: column;
   height: 70%;
-  overflow-y: scroll;
+}
+.description-text {
+  overflow-x: scroll;
+  height: 200px;
+  text-align: left;
 }
 .description-block::-webkit-scrollbar {
   display: none;
 }
-
+.description-text::-webkit-scrollbar {
+  display: none;
+}
+.description-text {
+  border-style: none;
+  text-justify: distribute;
+  color: white;
+  background-color: rgba(0, 0, 0, 0);
+}
 .cast {
   height: 30%;
   display: flex;
@@ -259,6 +277,7 @@ h2 {
   height: 100%;
   text-align: center;
   color: white;
+  transition: all 0.2s;
 }
 .artist .artist-photo {
   width: 100%;
@@ -269,7 +288,9 @@ h2 {
 .fake-details-body {
   box-sizing: border-box;
   width: 100vw;
-  height: 720px;
+  height: 100%;
+  min-height: 900px;
+  min-width: 1400px;
   padding: 30px;
   position: fixed;
   background-color: black;

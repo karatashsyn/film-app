@@ -15,14 +15,18 @@ function Home() {
         setmovies(data)
       })
   }
-
-  useEffect(() => {
+  const fetchGenres = async () => {
     fetch('/genres')
       .then((res) => res.json())
       .then((data) => {
         setCategories(data)
       })
-  })
+  }
+
+  useEffect(() => {
+    fetchGenres()
+    fetchMovies(searchKey)
+  }, [])
 
   const searchMovies = (e) => {
     fetchMovies(searchKey.replace(' ', '+'))
