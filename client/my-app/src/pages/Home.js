@@ -49,6 +49,7 @@ function Home() {
         <div className="categories-button" onMouseOver={showCategories}>
           Categories
         </div>
+        <div className="all-movies-btn">All</div>
 
         <input
           className="search-bar"
@@ -57,8 +58,10 @@ function Home() {
             setSearchKey(e.target.value)
           }}
         ></input>
-        <button onClick={searchMovies}>Search</button>
-        <h1>{searchKey}</h1>
+        <button className="search-btn" onClick={searchMovies}>
+          Search
+        </button>
+        {/* <h1>{searchKey}</h1> */}
         <div className="add-movie-button"></div>
       </div>
       <Categorie onMouseLeave={hideCategories} categories={categories} />

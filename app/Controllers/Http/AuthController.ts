@@ -3,6 +3,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 
 import { userValidator } from 'App/utils/userValidator'
+
 export default class AuthController {
   public async register({ request }: HttpContextContract) {
     try {
@@ -34,6 +35,7 @@ export default class AuthController {
       return err
     }
   }
+
   public async logout({ auth }: HttpContextContract) {
     try {
       await auth.use('api').revoke()
