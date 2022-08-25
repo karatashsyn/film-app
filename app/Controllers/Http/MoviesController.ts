@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { movieValidator } from 'App/utils/movieValidator'
 import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
+import Genre from 'App/Models/Genre'
 
 export default class MoviesController {
   public async alreadyAdded(movie): Promise<boolean> {
@@ -31,6 +32,7 @@ export default class MoviesController {
 
   public async addSingleMovieFromTMDB(queryString) {
     let TMDbMovie
+    let TMDBMovieGenreIds
     if (queryString) {
       await fetch(
         `https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query=${queryString}`
@@ -38,6 +40,7 @@ export default class MoviesController {
         .then((res) => res.json())
         .then((data) => {
           TMDbMovie = data.results[0]
+          TMDBMovieGenreIds = TMDbMovie.genre_ids
         })
     }
 
@@ -57,8 +60,19 @@ export default class MoviesController {
         return { message: 'You already have that film' }
       } else {
         console.log(movieToBeAdded.$attributes)
+        console.log('GenreIds Below')
+        console.log(TMDBMovieGenreIds)
 
         await movieToBeAdded.save()
+        TMDBMovieGenreIds.forEach(async (id) => {
+          const genre = await Genre.find(id)
+          console.log(genre?.$attributes)
+
+          console.log('pivottttttt')
+          Movie.$getRelation('genres')?.boot()
+          await movieToBeAdded.related('genres').attach([id])
+          console.log(Movie.$getRelation('genres')!.getPivotRelatedPair(movieToBeAdded))
+        })
         return movieToBeAdded.$attributes
       }
     } else {
@@ -99,7 +113,9 @@ export default class MoviesController {
         await this.addSingleMovieFromTMDB(queryString)
       }
 
-      allMovies = await Movie.query().where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
+      allMovies = await Movie.query()
+        .where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
+        .preload('genres')
 
       response.json(allMovies)
     } catch (err) {
@@ -110,8 +126,9 @@ export default class MoviesController {
   //I'll use this to show the details of the clicked movie (NOT A GOOD PRACTISE)
   public async getSingleMovie({ request, response }: HttpContextContract) {
     try {
-      const movie = await Movie.find(request.param('movieId'))
-      response.json(movie)
+      // const movie = await Movie.find(request.param('movieId'))
+      const movie = await Movie.query().where('id', request.param('movieId')).preload('genres')
+      response.json(movie[0])
     } catch (err) {
       response.json(err)
     }
@@ -146,7 +163,6 @@ export default class MoviesController {
       const payload = await request.validate({ schema: movieValidator.movieSchema })
       const currentMovieId = request.param('movieId')
       const movieToBeUpdated = await Movie.find(currentMovieId)
-
       movieToBeUpdated!.merge({
         title: payload.title,
         posterPath: payload.posterPath,

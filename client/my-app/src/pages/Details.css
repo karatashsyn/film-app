@@ -125,8 +125,6 @@ body {
   flex-direction: column;
   height: 70%;
   overflow-y: scroll;
-  outline: none;
-  border-style: none;
 }
 .description-block::-webkit-scrollbar {
   display: none;

@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import MovieArtist from './MovieArtist'
 import MovieGenre from './MovieGenre'
+import Genre from './Genre'
+import { LocalDriver } from '@adonisjs/core/build/standalone'
 
 export default class Movie extends BaseModel {
   @column({ isPrimary: true })
@@ -19,9 +21,14 @@ export default class Movie extends BaseModel {
   @column()
   public posterPath: string
 
-  @hasMany(() => MovieArtist)
-  public movieArtists: HasMany<typeof MovieArtist>
+  // @hasMany(() => MovieArtist)
+  // public movieArtists: HasMany<typeof MovieArtist>
 
-  @hasMany(() => MovieGenre)
-  public movieGenres: HasMany<typeof MovieGenre>
+  @manyToMany(() => Genre, {
+    localKey: 'id',
+    pivotForeignKey: 'movie_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'genre_id',
+  })
+  public genres: ManyToMany<typeof Genre>
 }

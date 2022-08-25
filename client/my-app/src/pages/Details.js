@@ -3,12 +3,14 @@ import { Link, useParams, useLocation } from 'react-router-dom'
 import axios from 'axios'
 
 function Details() {
+  const currentMovieId = useParams().movieId
   const [currentMovie, setCurrentMovie] = useState({})
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const currentMovieId = useParams().movieId
   const [editMode, setEditMode] = useState(false)
   const [posterPath, setPosterPath] = useState()
+  const [selectedCategory, setSelectedCategory] = useState()
+  const [genres, setGenres] = useState('')
 
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
@@ -18,6 +20,7 @@ function Details() {
         setTitle(data.title)
         setDescription(data.description)
         setPosterPath(data.poster_path)
+        setGenres(data.genres.map((e) => `${e.name}`).join(', '))
       })
       .catch((err) => {
         console.log(err)
@@ -110,7 +113,7 @@ function Details() {
                   </Link>
                 </div>
               </div>
-              <div className="genres">Adventure, Horror</div>
+              <div className="genres">{genres}</div>
               <div className="description-block">
                 <textarea
                   onChange={(e) => {
