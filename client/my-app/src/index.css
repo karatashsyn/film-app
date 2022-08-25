@@ -51,12 +51,18 @@ body {
   position: absolute;
   width: 300px;
   height: 0;
-  overflow: hidden;
+  overflow: scroll;
   transition: all 0.3s;
+}
+.categories::-webkit-scrollbar {
+  display: none;
 }
 
 .categories div {
-  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
   background-color: rgb(48, 48, 48);
   backdrop-filter: blur(20px);
   border: 1px solid black;
