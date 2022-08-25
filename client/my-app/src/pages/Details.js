@@ -101,8 +101,13 @@ function Details() {
                   <div onClick={editBtnFunctions} className="edit-btn">
                     Edit
                   </div>
-
-                  <div onClick={deleteMovie} className="delete-btn inactive-delete-movie"></div>
+                  <Link
+                    to={{ pathname: '/' }}
+                    onClick={deleteMovie}
+                    className="delete-btn inactive-delete-movie"
+                  >
+                    <div></div>
+                  </Link>
                 </div>
               </div>
               <div className="genres">Adventure, Horror</div>
