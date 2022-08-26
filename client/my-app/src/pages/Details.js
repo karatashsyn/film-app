@@ -19,7 +19,11 @@ function Details() {
         setCurrentMovie(data)
         setTitle(data.title)
         setDescription(data.description)
-        setPosterPath(data.poster_path)
+        console.log(data.poster_path)
+        data.poster_path === 'https://image.tmdb.org/t/p/w500null'
+          ? setPosterPath('https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE')
+          : setPosterPath(data.poster_path)
+
         setGenres(data.genres.map((e) => `${e.name}`).join(', '))
       })
       .catch((err) => {

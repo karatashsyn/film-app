@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import MovieArtist from './MovieArtist'
-import MovieGenre from './MovieGenre'
 import Genre from './Genre'
 import { LocalDriver } from '@adonisjs/core/build/standalone'
 

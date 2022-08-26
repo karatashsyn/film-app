@@ -3,6 +3,7 @@ import { movieValidator } from 'App/utils/movieValidator'
 import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
 import Genre from 'App/Models/Genre'
+import GenreMovie from 'App/Models/GenreMovie'
 
 export default class MoviesController {
   public async alreadyAdded(movie): Promise<boolean> {
@@ -95,9 +96,18 @@ export default class MoviesController {
     return movies
   }
 
-  //CRUD OPERATIONS for Movies
-
+  //CRUD OPERATIONS for Movies\
   public async getMovies({ request, response }: HttpContextContract) {
+    // function queryEncoder(queryString) {
+    //   const allKeyValues = queryString.split('&')
+    //   console.log(allKeyValues)
+    //   const queryObject = {
+    //     title: allKeyValues[0].split('=')[1],
+    //     categoryId: allKeyValues[1].split('=')[1],
+    //   }
+    //   return queryObject
+    // }
+    // console.log(queryEncoder('searchkey=naber&categoryId=5'))
     let allMovies
     try {
       if (request.param('categoryId')) {
@@ -110,12 +120,17 @@ export default class MoviesController {
       let isMatching = await this.exactMatchINDB(searchString)
       console.log(isMatching)
       if (!isMatching) {
+        console.log(`Searching for ${queryString} in TMDB API`)
         await this.addSingleMovieFromTMDB(queryString)
       }
-
       allMovies = await Movie.query()
         .where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
         .preload('genres')
+      // if (request.param('categoryId')) {
+      //   const currentGenre = await Genre.find(request.param('categoryId'))
+      //   const filteredMovies = allMovies.filter((e) => e.genres.includes(currentGenre))
+      //   console.log(filteredMovies)
+      // }
 
       response.json(allMovies)
     } catch (err) {

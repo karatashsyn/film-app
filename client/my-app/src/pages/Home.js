@@ -40,16 +40,22 @@ function Home() {
   }
   const hideCategories = () => {
     const categoriesList = document.querySelector('.categories')
-
     categoriesList.classList.remove('active')
   }
+
+  const bringAll = () => {
+    fetchMovies('')
+  }
+
   return (
     <div className="App">
       <div className="nav">
         <div className="categories-button" onMouseOver={showCategories}>
           Categories
         </div>
-        <div className="all-movies-btn">All</div>
+        <div className="all-movies-btn" onClick={bringAll}>
+          All
+        </div>
 
         <input
           className="search-bar"
@@ -64,7 +70,13 @@ function Home() {
         {/* <h1>{searchKey}</h1> */}
         <div className="add-movie-button"></div>
       </div>
-      <Categorie onMouseLeave={hideCategories} categories={categories} />
+      <div>
+        <div onMouseLeave={hideCategories} className="categories">
+          {categories.map((c) => (
+            <div key={c.id}>{c.name}</div>
+          ))}
+        </div>
+      </div>
 
       <div>
         <Movies movies={movies} />
