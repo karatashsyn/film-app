@@ -67,9 +67,9 @@ export default class MoviesController {
         await movieToBeAdded.save()
         TMDBMovieGenreIds.forEach(async (id) => {
           const genre = await Genre.find(id)
-          console.log(genre?.$attributes)
+          // console.log(genre?.$attributes)
 
-          console.log('pivottttttt')
+          // console.log('pivottttttt')
           Movie.$getRelation('genres')?.boot()
           await movieToBeAdded.related('genres').attach([id])
           console.log(Movie.$getRelation('genres')!.getPivotRelatedPair(movieToBeAdded))
@@ -82,19 +82,19 @@ export default class MoviesController {
     }
   }
 
-  public async getMoviesFromTMDBAPI() {
-    //Most 20 popular movie
-    let movies
-    await fetch(
-      'https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate'
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        movies = data.results
-      })
-    return movies
-  }
+  // public async getMoviesFromTMDBAPI() {
+  //   //Most 20 popular movie
+  //   let movies
+  //   await fetch(
+  //     'https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate'
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data)
+  //       movies = data.results
+  //     })
+  //   return movies
+  // }
 
   //CRUD OPERATIONS for Movies\
   public async getMovies({ request, response }: HttpContextContract) {
@@ -108,7 +108,11 @@ export default class MoviesController {
     //   return queryObject
     // }
     // console.log(queryEncoder('searchkey=naber&categoryId=5'))
+
     let allMovies
+    //if url.has(categoryId),
+    //allmovies = Movie.query().filter(e=>e.genres.includes(categoryIdComingFromUrl))
+
     try {
       if (request.param('categoryId')) {
         // MovieCategory tablosundan category id si 'categoryId' ile es olanlari alip movieleri preloadla.

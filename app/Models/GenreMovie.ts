@@ -7,10 +7,10 @@ export default class GenreMovie extends BaseModel {
   public id: number
 
   @column()
-  public genre_id: number
+  public genreId: number
 
   @column()
-  public movie_id: number
+  public movieId: number
 
   @belongsTo(() => Movie)
   public movie: BelongsTo<typeof Movie>
