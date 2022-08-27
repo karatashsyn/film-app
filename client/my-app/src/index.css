@@ -153,7 +153,7 @@ body {
   max-width: 200px;
   height: auto;
   margin: auto;
-  margin-top: 60px;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
   transition: all 3s;
@@ -168,7 +168,7 @@ body {
   width: 100vw;
   position: absolute;
   z-index: 999;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(12, 12, 12);
   opacity: 0.5;
   top: 50%;
   right: 0;
@@ -190,7 +190,95 @@ h2 {
 }
 
 /* ----------------------DETAILS PAGE----------------------- */
+.artist-pannel {
+  position: fixed;
+  min-width: 600px;
+  min-height: 500px;
+  max-height: 500px;
+  top: 50%;
+  left: 50%;
+  border-radius: 8px;
+  transform: translate(-50%, -50%);
+  overflow-y: scroll;
+  background-color: rgba(64, 64, 64, 0.7);
+  backdrop-filter: blur(200px);
 
+  box-shadow: 10px 10px 1000px 20px rgb(0, 0, 0);
+}
+
+.artist-pannel::-webkit-scrollbar {
+  display: none;
+}
+.hidden-artist-pannel {
+  display: none;
+}
+.search-artist-bar-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  min-height: 70px;
+}
+.search-artist-bar {
+  min-height: 40px;
+  min-width: 80%;
+  max-width: 300px;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  transition: all 0.2s;
+}
+.search-artist-btn {
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 80px;
+  background-color: #000;
+  color: white;
+  text-align: center;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+.search-artist-btn:hover {
+  background-color: #ffffff;
+  color: black;
+}
+
+.artist-box {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+  background-color: rgba(64, 64, 64, 0);
+  height: 100px;
+  width: 100%;
+
+  cursor: pointer;
+  transition: all 0.2s;
+  /* del */
+  /* del */
+}
+.artist-box:hover {
+  background-color: black;
+}
+.artist-box-image {
+  max-height: 100%;
+}
+.there-is-no-such-artist {
+  /* width: 100%; */
+  text-align: center;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  min-height: 50px;
+}
 .blur-background {
   display: flex;
   background-size: cover;
@@ -355,8 +443,10 @@ h2 {
 .cast {
   height: 30%;
   display: flex;
+  flex-direction: row;
+  width: 100%;
   overflow-x: scroll;
-  overflow-y: hidden;
+  overflow-y: visible;
 }
 .cast::-webkit-scrollbar {
   display: none;

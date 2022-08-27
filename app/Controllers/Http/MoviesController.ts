@@ -31,6 +31,13 @@ export default class MoviesController {
     return true
   }
 
+  //Info Decoder coming from url which contains infos for the purpose of adding relation between Movie and Artist
+  public pairInfoEncoder(infoString) {
+    const pairs = infoString.split('&')
+    const movieArtistIdPairs = { movieId: pairs[0].split('=')[1], artistId: pairs[1].split('=')[1] }
+    return movieArtistIdPairs
+  }
+
   public async addSingleMovieFromTMDB(queryString) {
     let TMDbMovie
     let TMDBMovieGenreIds
@@ -61,18 +68,14 @@ export default class MoviesController {
         return { message: 'You already have that film' }
       } else {
         console.log(movieToBeAdded.$attributes)
-        console.log('GenreIds Below')
-        console.log(TMDBMovieGenreIds)
+        // console.log('GenreIds Below')
+        // console.log(TMDBMovieGenreIds)
 
         await movieToBeAdded.save()
+        // Setting bond between each genre we added and the added movie
         TMDBMovieGenreIds.forEach(async (id) => {
-          const genre = await Genre.find(id)
-          // console.log(genre?.$attributes)
-
-          // console.log('pivottttttt')
           Movie.$getRelation('genres')?.boot()
           await movieToBeAdded.related('genres').attach([id])
-          console.log(Movie.$getRelation('genres')!.getPivotRelatedPair(movieToBeAdded))
         })
         return movieToBeAdded.$attributes
       }
@@ -95,6 +98,12 @@ export default class MoviesController {
   //     })
   //   return movies
   // }
+  public async addRelation({ request }: HttpContextContract) {
+    const infoObject = this.pairInfoEncoder(request.param('pairInfo'))
+    const relatedMovie = await Movie.find(infoObject.movieId)
+    Movie.$getRelation('genres')?.boot()
+    await relatedMovie!.related('artists').attach([infoObject.artistId])
+  }
 
   //CRUD OPERATIONS for Movies\
   public async getMovies({ request, response }: HttpContextContract) {
@@ -112,6 +121,8 @@ export default class MoviesController {
     let allMovies
     //if url.has(categoryId),
     //allmovies = Movie.query().filter(e=>e.genres.includes(categoryIdComingFromUrl))
+    const someGenre = await Genre.find(27)
+    console.log(someGenre)
 
     try {
       if (request.param('categoryId')) {
@@ -130,12 +141,15 @@ export default class MoviesController {
       allMovies = await Movie.query()
         .where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
         .preload('genres')
-      // if (request.param('categoryId')) {
-      //   const currentGenre = await Genre.find(request.param('categoryId'))
-      //   const filteredMovies = allMovies.filter((e) => e.genres.includes(currentGenre))
-      //   console.log(filteredMovies)
-      // }
+        .preload('artists')
 
+      ////////////////////////////////////////////////////////////////////////////////
+
+      // allMovies.forEach((e) => {
+      //Filter by category id
+      // })
+
+      ////////////////////////////////////////////////////////////////////////////////
       response.json(allMovies)
     } catch (err) {
       response.json(err)
@@ -146,7 +160,10 @@ export default class MoviesController {
   public async getSingleMovie({ request, response }: HttpContextContract) {
     try {
       // const movie = await Movie.find(request.param('movieId'))
-      const movie = await Movie.query().where('id', request.param('movieId')).preload('genres')
+      const movie = await Movie.query()
+        .where('id', request.param('movieId'))
+        .preload('genres')
+        .preload('artists')
       response.json(movie[0])
     } catch (err) {
       response.json(err)

@@ -6,6 +6,9 @@ export default class Artist extends BaseModel {
   public id: number
 
   @column()
+  public tmdbId: number
+
+  @column()
   public name: string
 
   @column()

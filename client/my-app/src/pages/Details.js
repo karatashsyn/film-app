@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import axios from 'axios'
+import ArtistRows from '../components/ArtistRows'
+import ArtistBoxes from '../components/ArtistBoxes'
 
 function Details() {
   const currentMovieId = useParams().movieId
@@ -11,6 +13,11 @@ function Details() {
   const [posterPath, setPosterPath] = useState()
   const [selectedCategory, setSelectedCategory] = useState()
   const [genres, setGenres] = useState('')
+  const [searchedArtists, setSearchedArtists] = useState([])
+  const [selectedArtists, setSelectedArtists] = useState([])
+  const [preLoadedArtists, setPreLoadedArtistst] = useState([])
+  const [searchKey, setSearchKey] = useState('')
+  const [clicked, setClicked] = useState(false)
 
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
@@ -19,6 +26,8 @@ function Details() {
         setCurrentMovie(data)
         setTitle(data.title)
         setDescription(data.description)
+        console.log(data.artists)
+        setPreLoadedArtistst(data.artists)
         console.log(data.poster_path)
         data.poster_path === 'https://image.tmdb.org/t/p/w500null'
           ? setPosterPath('https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE')
@@ -31,8 +40,22 @@ function Details() {
       })
   }
 
+  const fetcArtists = async (queryString) => {
+    fetch(`/artists/${queryString}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSearchedArtists(data)
+      })
+  }
+
+  const searchArtists = () => {
+    fetcArtists(searchKey.split(' ').join('+'))
+  }
+
   useEffect(() => {
     fetchMovie()
+    fetcArtists('')
+    // del
   }, [])
 
   function changeReadonly() {
@@ -84,7 +107,17 @@ function Details() {
     changeReadonly()
     switchBetweenEditAndSave()
   }
-
+  function openCloseArtistPannel() {
+    const pannel = document.querySelector('.artist-pannel')
+    if (pannel.classList.contains('hidden-artist-pannel')) {
+      pannel.classList.remove('hidden-artist-pannel')
+    } else {
+      pannel.classList.toggle('hidden-artist-pannel')
+    }
+    // del
+    // fetcArtists()
+    // del
+  }
   return (
     <>
       <div className="fake-details-body">
@@ -131,18 +164,28 @@ function Details() {
               </div>
             </div>
             <div className="cast">
-              <div className="artist">
-                <div className="artist-photo"></div>
-                <p className="artist-name">Some Actor</p>
-              </div>
-              <div className="artist">
-                <div className="artist-photo"></div>
-                <p className="artist-name">Some Actor</p>
-              </div>
-              <div className="artist add-artist hidden-add-btn">
+              <ArtistBoxes artists={preLoadedArtists} />
+
+              <div className="artist add-artist hidden-add-btn" onClick={openCloseArtistPannel}>
                 <div className="artist-photo"></div>
                 <p className="artist-name"> ADD </p>
               </div>
+            </div>
+            <div className="artist-pannel hidden-artist-pannel">
+              <div className="search-artist-bar-container">
+                <input
+                  placeholder="Search for artist"
+                  className="search-artist-bar"
+                  type="text"
+                  onChange={(e) => {
+                    setSearchKey(e.target.value)
+                  }}
+                ></input>
+                <button className="search-artist-btn" onClick={searchArtists}>
+                  Search
+                </button>
+              </div>
+              <ArtistRows artists={searchedArtists} />
             </div>
           </div>
         </div>

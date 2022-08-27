@@ -6,8 +6,9 @@ export default class Artists extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
+      table.integer('tmdb_id')
       table.string('name')
-      table.string('biography')
+      table.text('biography')
       table.string('profile_path')
       table.string('place_of_birth')
     })
