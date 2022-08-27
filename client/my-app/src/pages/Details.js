@@ -181,9 +181,14 @@ function Details() {
                     setSearchKey(e.target.value)
                   }}
                 ></input>
-                <button className="search-artist-btn" onClick={searchArtists}>
-                  Search
-                </button>
+                <div className="search-artist-button-container">
+                  <button className="search-artist-btn" onClick={searchArtists}>
+                    Search
+                  </button>
+                  <button className="cancel-btn" onClick={openCloseArtistPannel}>
+                    Cancel
+                  </button>
+                </div>
               </div>
               <ArtistRows artists={searchedArtists} />
             </div>
