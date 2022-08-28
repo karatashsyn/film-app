@@ -205,6 +205,9 @@ export default class MoviesController {
         description: payload.description,
       })
 
+      await movieToBeUpdated?.related('artists').sync(request.body().relatedArtistsIds)
+      await movieToBeUpdated?.related('genres').sync(request.body().relatedGenresIds)
+
       movieToBeUpdated!.save()
     } catch (err) {
       return err

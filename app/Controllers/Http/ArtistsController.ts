@@ -110,4 +110,13 @@ export default class ArtistsController {
       response.json(err)
     }
   }
+
+  public async getSingleArtist({ request, response }: HttpContextContract) {
+    try {
+      const artist = await Artist.find(request.param('artistId'))
+      response.json(artist)
+    } catch (err) {
+      return err
+    }
+  }
 }

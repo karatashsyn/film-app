@@ -192,8 +192,8 @@ h2 {
 /* ----------------------DETAILS PAGE----------------------- */
 .artist-pannel {
   position: fixed;
-  min-width: 600px;
-  min-height: 500px;
+  min-width: 40%;
+  /* min-height: 500px; */
   max-height: 500px;
   top: 50%;
   left: 50%;
@@ -204,12 +204,14 @@ h2 {
   backdrop-filter: blur(200px);
   transition: all 0.3s;
   box-shadow: 10px 10px 1000px 20px rgb(0, 0, 0);
+  opacity: 1;
 }
 
 .artist-pannel::-webkit-scrollbar {
   display: none;
 }
 .hidden-artist-pannel {
+  opacity: 0;
   display: none;
 }
 .search-artist-bar-container {
@@ -219,6 +221,7 @@ h2 {
   width: 100%;
   min-height: 70px;
 }
+
 .search-artist-bar {
   min-height: 40px;
   min-width: 60%;
@@ -285,8 +288,6 @@ h2 {
 
   cursor: pointer;
   transition: all 0.2s;
-  /* del */
-  /* del */
 }
 .artist-box:hover {
   background-color: black;
@@ -305,7 +306,7 @@ h2 {
 .blur-background {
   display: flex;
   background-size: cover;
-  position: absolute;
+  position: fixed;
   z-index: -1;
   top: 0;
   left: 0;
@@ -315,23 +316,24 @@ h2 {
   filter: blur(100px);
   opacity: 0.5;
 }
+
 .main-container {
-  z-index: 999;
   width: 100%;
   width: 100%;
   height: 100%;
-  min-width: 840px;
   display: flex;
   justify-content: space-around;
+
   color: white;
+  background: rgba(0, 0, 0, 0);
 }
 
 .poster {
-  width: 32%;
-  min-width: 300px;
-  height: auto;
+  /* min-width: auto; */
+  /* height: auto; */
   background-size: contain;
   background-repeat: no-repeat;
+  margin-right: 20px;
 }
 
 .info-container {
@@ -345,7 +347,7 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  height: 50%;
+  height: 70%;
 }
 
 .first-row {
@@ -353,25 +355,23 @@ h2 {
   width: 100%;
   align-items: center;
   justify-content: space-between;
-
   height: 20%;
 }
 .title {
-  width: 70%;
+  width: 75%;
   border-style: none;
   outline: none;
   background: rgba(0, 0, 0, 0);
   color: white;
-  position: relative;
+  /* position: relative; */
   font-size: 44px;
   text-overflow: ellipsis;
-  top: 0;
 }
 .buttons {
   font-size: 20px;
   width: 150px;
   display: flex;
-  height: 60%;
+  height: 40px;
   justify-content: space-between;
 }
 .edit-btn {
@@ -398,20 +398,23 @@ h2 {
   justify-content: center;
   align-items: center;
   padding-bottom: 2px;
-  border: 1px solid white;
+  border: none;
   overflow: hidden;
   width: 64%;
   border-radius: 24px;
+  background-color: #38dc64;
   color: white;
   transition: 0.4s;
   cursor: pointer;
-  animation: saveBtn;
   animation-duration: 3s;
+  color: black;
 }
 .save-btn:hover {
-  color: black;
   background-color: #38dc64;
-  border: none;
+}
+.nonclickable {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .delete-btn {
@@ -433,12 +436,48 @@ h2 {
 .inactive-delete-movie {
   pointer-events: none;
 }
-.genres {
+
+.genres-text {
   height: 10%;
   font-size: 20px;
 }
+.genres-pannel {
+  position: relative;
+  display: flex;
+  background: rgba(64, 64, 64, 0.5);
+  width: 100%;
+  border-radius: 2px;
+  color: white;
+  transition: all 0.2s;
+  margin-top: 8px;
+  overflow-y: hidden;
+  overflow: scroll;
+  height: 90px;
+  flex-wrap: wrap;
+}
+.hidden-genres-pannel {
+  height: 0;
+}
+.genres-pannel::-webkit-scrollbar {
+  display: none;
+}
+.genre-box {
+  margin: 4px;
+  padding: 2px 8px 2px 8px;
+  height: 24px;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: rgb(64, 64, 64);
+  border-radius: 16px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
 .description-block {
-  margin-top: 50px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   height: 70%;
@@ -478,25 +517,32 @@ h2 {
   display: flex;
   flex-direction: column;
   padding-top: 20px;
-  min-width: 16%;
+  min-width: 140px;
+  background-size: contain;
   margin-right: 30px;
   height: 100%;
   text-align: center;
   color: white;
   transition: all 0.2s;
-  margin-top: 20px;
-  cursor: pointer;
 }
-.artist:hover {
-  transform: translateY(-20px);
-}
+
 .artist .artist-photo {
-  width: 100%;
-  height: 90%;
+  width: auto;
+  height: 100%;
   background-image: url('https://cdn.wallpapersafari.com/76/7/wklvAb.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  border-radius: 2px;
+  transition: all 0.2s;
+
+  cursor: pointer;
+}
+.artist .artist-photo:hover {
+  transform: translateY(-20px);
+}
+.artist .artist-photo:hover .artist-name {
+  transform: translateY(-20px);
 }
 
 .add-artist {
@@ -516,11 +562,11 @@ h2 {
 
 .fake-details-body {
   box-sizing: border-box;
-  width: 100vw;
+  width: 100%;
   height: 100%;
-  min-height: 720px;
-  min-width: 1400px;
-  padding: 30px;
-  position: fixed;
-  background-color: black;
+  padding: 30px 20px;
+  background-size: cover;
+}
+.fake-details-body::-webkit-scrollbar {
+  display: none;
 }
