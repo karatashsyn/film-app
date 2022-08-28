@@ -16,6 +16,7 @@ function Details() {
   const [searchedArtists, setSearchedArtists] = useState([])
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
+  const [artistAdded, setArtistAdded] = useState(false)
   const [allGenres, setAllGenres] = useState([])
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
@@ -26,7 +27,6 @@ function Details() {
         setDescription(data.description)
         console.log(data.artists)
         setSelectedArtists(data.artists)
-
         console.log(data.poster_path)
         data.poster_path === 'https://image.tmdb.org/t/p/w500null'
           ? setPosterPath('https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE')
@@ -75,6 +75,22 @@ function Details() {
     fetcArtists('')
     // del
   }, [])
+  //Yeni artist ekleyince delete artist butonu initial olarak bu artiste hidden olarak geliyor.
+  //Ancak artistleri duzenleme modundayken ekliyoruz ve duzenleme modundayken her artistin uzerinde
+  // delete butonu olmali. Bu yuzden artist eklememize dependent olan bir effect ile yeni gelen
+  // artistlerin de uzerinde delete butonu olmasini asagidaki effectle sagliyoruz.
+  useEffect(() => {
+    const removeArtistbtns = Array.from(document.getElementsByClassName('remove-artist-btn'))
+    if (editMode === true) {
+      removeArtistbtns.forEach((element) => {
+        element.classList.remove('hidden-remove-artist-btn')
+      })
+    } else {
+      removeArtistbtns.forEach((element) => {
+        element.classList.toggle('hidden-remove-artist-btn')
+      })
+    }
+  }, [artistAdded])
 
   function changeReadonly() {
     const title = document.querySelector('.title')
@@ -109,6 +125,8 @@ function Details() {
     const deleteBtn = document.querySelector('.delete-btn')
     const addArtistBtn = document.querySelector('.add-artist')
     const genresPannel = document.querySelector('.genres-pannel')
+    const removeArtistbtns = Array.from(document.getElementsByClassName('remove-artist-btn'))
+    console.log(removeArtistbtns)
     if (editMode === true) {
       setEditMode(false)
       editBtn.classList.remove('save-btn')
@@ -116,6 +134,9 @@ function Details() {
       deleteBtn.classList.toggle('inactive-delete-movie')
       addArtistBtn.classList.toggle('hidden-add-btn')
       genresPannel.classList.toggle('hidden-genres-pannel')
+      removeArtistbtns.forEach((element) => {
+        element.classList.toggle('hidden-remove-artist-btn')
+      })
       updateMovie()
     } else {
       setEditMode(true)
@@ -124,6 +145,9 @@ function Details() {
       deleteBtn.classList.remove('inactive-delete-movie')
       addArtistBtn.classList.remove('hidden-add-btn')
       genresPannel.classList.remove('hidden-genres-pannel')
+      removeArtistbtns.forEach((element) => {
+        element.classList.remove('hidden-remove-artist-btn')
+      })
     }
   }
   function editBtnFunctions() {
@@ -220,10 +244,37 @@ function Details() {
               </div>
             </div>
             <div className="cast">
-              <ArtistBoxes artists={selectedArtists} />
+              {selectedArtists.map((e) => (
+                <div className="artist">
+                  <div className="remove-artist-btn-container">
+                    <div
+                      onClick={() => {
+                        console.log('before ' + selectedArtists)
+                        setSelectedArtists(selectedArtists.filter((item) => item.id !== e.id))
+                      }}
+                      className="remove-artist-btn hidden-remove-artist-btn"
+                    >
+                      Delete
+                    </div>
+                  </div>
 
-              <div className="artist add-artist hidden-add-btn" onClick={openCloseArtistPannel}>
-                <div className="artist-photo"></div>
+                  <div
+                    className="artist-photo"
+                    style={{ backgroundImage: `url(${e.profile_path})` }}
+                  ></div>
+                  <p className="artist-name">{e.name}</p>
+                </div>
+              ))}
+
+              <div className="artist add-artist hidden-add-btn">
+                <div className="remove-artist-btn-container">
+                  <img
+                    src="https://cdn.iconscout.com/icon/free/png-256/x-7-100307.png"
+                    className="fake-remove-artist-btn"
+                  ></img>
+                </div>
+
+                <div className="artist-photo" onClick={openCloseArtistPannel}></div>
                 <p className="artist-name"> ADD </p>
               </div>
             </div>
@@ -251,10 +302,10 @@ function Details() {
                   <div className="artist-container">
                     <div
                       onClick={() => {
-                        console.log('hiii')
                         if (!selectedArtists.map((artist) => artist.id).includes(a.id)) {
                           setSelectedArtists([...selectedArtists, a])
                         }
+                        setArtistAdded(!artistAdded)
                       }}
                       className="artist-box"
                       style={{
