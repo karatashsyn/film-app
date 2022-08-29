@@ -3,7 +3,6 @@ import { movieValidator } from 'App/utils/movieValidator'
 import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
 import Genre from 'App/Models/Genre'
-import GenreMovie from 'App/Models/GenreMovie'
 
 export default class MoviesController {
   public async alreadyAdded(movie): Promise<boolean> {

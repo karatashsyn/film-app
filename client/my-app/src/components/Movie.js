@@ -1,4 +1,4 @@
-import { NavLink, Link, useParams, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 const baseImageUrl = 'https://image.tmdb.org/t/p/w500'
 
 function Movies(props) {

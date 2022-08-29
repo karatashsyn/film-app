@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import axios from 'axios'
-import ArtistRow from '../components/ArtistRow'
-import ArtistBoxes from '../components/ArtistBoxes'
+// import ArtistRow from '../components/ArtistRow'
+// import ArtistBoxes from '../components/ArtistBoxes'
 
-function Details() {
+function MovieDetails() {
   const currentMovieId = useParams().movieId
   const [currentMovie, setCurrentMovie] = useState({})
   const [title, setTitle] = useState('')
@@ -258,10 +258,12 @@ function Details() {
                     </div>
                   </div>
 
-                  <div
-                    className="artist-photo"
-                    style={{ backgroundImage: `url(${e.profile_path})` }}
-                  ></div>
+                  <Link to={{ pathname: `/artist/${e.id}` }}>
+                    <div
+                      className="artist-photo"
+                      style={{ backgroundImage: `url(${e.profile_path})` }}
+                    ></div>
+                  </Link>
                   <p className="artist-name">{e.name}</p>
                 </div>
               ))}
@@ -337,4 +339,4 @@ function Details() {
     </>
   )
 }
-export default Details
+export default MovieDetails

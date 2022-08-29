@@ -1,7 +1,5 @@
 import Movies from './../components/Movie'
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import Categorie from '../components/Categorie'
 
 function Home() {
   const [movies, setmovies] = useState([])
@@ -49,37 +47,39 @@ function Home() {
 
   return (
     <div className="App">
-      <div className="nav">
-        <div className="categories-button" onMouseOver={showCategories}>
-          Categories
+      <div className="home-body">
+        <div className="nav">
+          <div className="categories-button" onMouseOver={showCategories}>
+            Categories
+          </div>
+          <div className="all-movies-btn" onClick={bringAll}>
+            All
+          </div>
+
+          <input
+            className="search-bar"
+            type="text"
+            onChange={(e) => {
+              setSearchKey(e.target.value)
+            }}
+          ></input>
+          <button className="search-btn" onClick={searchMovies}>
+            Search
+          </button>
+          {/* <h1>{searchKey}</h1> */}
+          <div className="add-movie-button"></div>
         </div>
-        <div className="all-movies-btn" onClick={bringAll}>
-          All
+        <div>
+          <div onMouseLeave={hideCategories} className="categories">
+            {categories.map((c) => (
+              <div key={c.id}>{c.name}</div>
+            ))}
+          </div>
         </div>
 
-        <input
-          className="search-bar"
-          type="text"
-          onChange={(e) => {
-            setSearchKey(e.target.value)
-          }}
-        ></input>
-        <button className="search-btn" onClick={searchMovies}>
-          Search
-        </button>
-        {/* <h1>{searchKey}</h1> */}
-        <div className="add-movie-button"></div>
-      </div>
-      <div>
-        <div onMouseLeave={hideCategories} className="categories">
-          {categories.map((c) => (
-            <div key={c.id}>{c.name}</div>
-          ))}
+        <div>
+          <Movies movies={movies} />
         </div>
-      </div>
-
-      <div>
-        <Movies movies={movies} />
       </div>
     </div>
   )
