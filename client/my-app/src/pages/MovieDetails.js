@@ -188,7 +188,6 @@ function MovieDetails() {
                   readOnly={true}
                   onChange={(e) => {
                     setTitle(e.target.value)
-                    console.log(e.target.value)
                   }}
                   className="title"
                   value={title}

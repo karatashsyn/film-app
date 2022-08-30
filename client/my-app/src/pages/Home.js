@@ -1,5 +1,6 @@
 import Movies from './../components/Movie'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 function Home() {
   const [movies, setmovies] = useState([])
@@ -61,13 +62,15 @@ function Home() {
             type="text"
             onChange={(e) => {
               setSearchKey(e.target.value)
+              console.log(searchKey)
             }}
           ></input>
           <button className="search-btn" onClick={searchMovies}>
             Search
           </button>
-          {/* <h1>{searchKey}</h1> */}
-          <div className="add-movie-button"></div>
+          <Link to={{ pathname: '/createmovie' }}>
+            <div className="add-movie-button"></div>
+          </Link>
         </div>
         <div>
           <div onMouseLeave={hideCategories} className="categories">

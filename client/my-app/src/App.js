@@ -4,6 +4,7 @@ import MovieDetails from './pages/MovieDetails'
 import ArtistDetails from './pages/ArtistDetails'
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import CreateMovie from './pages/CreateMovie'
 function App() {
   return (
     <Router>
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Home />}></Route>
           <Route path="/details/:movieId" element={<MovieDetails />}></Route>
           <Route path="/artist/:artistId" element={<ArtistDetails />}></Route>
+          <Route path="/createmovie" element={<CreateMovie />}></Route>
         </Routes>
       </div>
     </Router>

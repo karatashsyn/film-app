@@ -28,7 +28,7 @@ Route.get('/', async () => {
 })
 Route.post('/register', 'AuthController.register')
 Route.post('/login', 'AuthController.login')
-Route.post('movies', 'MoviesController.createMovie')
+Route.post('/movies', 'MoviesController.createMovie')
 Route.delete('movies/:movieId', 'MoviesController.deleteMovie')
 Route.get('/movies/:search?', 'MoviesController.getMovies')
 Route.patch('movies/:movieId', 'MoviesController.updateMovie')

@@ -169,7 +169,7 @@ export default class MoviesController {
     }
   }
 
-  public async createMovie({ auth, request }: HttpContextContract) {
+  public async createMovie({ request }: HttpContextContract) {
     try {
       const payload = await request.validate({ schema: movieValidator.movieSchema })
       const movie = new Movie()
@@ -179,7 +179,11 @@ export default class MoviesController {
         description: payload.description,
       })
       await movie.save()
+      await movie.related('artists').sync(request.body().artistsIds)
+      await movie.related('genres').sync(request.body().genresIds)
     } catch (err) {
+      console.log(err)
+
       return err
     }
   }
