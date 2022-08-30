@@ -3,13 +3,9 @@ import { artistValidator } from 'App/utils/artistValidator'
 import Artist from 'App/Models/Artist'
 import fetch from 'node-fetch'
 import Movie from 'App/Models/Movie'
+const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 
 export default class ArtistsController {
-  // public async getArtists() {
-  //   const allArtists = await Artist.all()
-  //   return allArtists
-  // }
-
   public async createArtist({ request }: HttpContextContract) {
     const payload = await request.validate({ schema: artistValidator.artistSchema })
     const artist = new Artist()
@@ -17,8 +13,8 @@ export default class ArtistsController {
     await artist.save()
   }
 
-  public async alreadyAdded(artist): Promise<boolean> {
-    const targetArtist = await Artist.findBy('tmdb_id', artist.tmdbId)
+  public async alreadyAdded(tmdbartist): Promise<boolean> {
+    const targetArtist = await Artist.findBy('tmdb_id', tmdbartist.id)
     if (targetArtist) {
       console.log('You already have a movie with the same TMDB id ')
       return true
@@ -62,21 +58,20 @@ export default class ArtistsController {
       })
     const artistToBeAdded = new Artist()
     if (tmdbArtist) {
-      artistToBeAdded.merge({
-        tmdbId: tmdbArtist.id,
-        name: tmdbArtist.name,
-        biography: tmdbArtist.biography,
-        profilePath: `https://image.tmdb.org/t/p/w500${tmdbArtist.profile_path}`,
-        placeOfBirth: tmdbArtist.place_of_birth,
-      })
-      //Same logic with movie part
-      if (await this.alreadyAdded(artistToBeAdded)) {
+      if (await this.alreadyAdded(tmdbArtist)) {
         console.log('You already have that artist')
         return { message: 'You already have that artist' }
       } else {
-        console.log(artistToBeAdded.$attributes)
+        artistToBeAdded.merge({
+          tmdbId: tmdbArtist.id,
+          name: tmdbArtist.name,
+          biography: tmdbArtist.biography,
+          profilePath: `${IMG_BASE_URL}${tmdbArtist.profile_path}`,
+          placeOfBirth: tmdbArtist.place_of_birth,
+        })
         await artistToBeAdded.save()
       }
+      //Same logic with movie part
     } else {
       console.log('There is no such artist')
       return { message: 'There is no such movie' }
@@ -86,14 +81,13 @@ export default class ArtistsController {
       name: tmdbArtist.name,
       tmdbId: tmdbArtist.id,
       biography: tmdbArtist.biography,
-      profilePath: `https://image.tmdb.org/t/p/w500${tmdbArtist.profile_path}`,
+      profilePath: `${IMG_BASE_URL}${tmdbArtist.profile_path}`,
       placeOfBirth: tmdbArtist.place_of_birth,
     }
   }
 
   public async getArtists({ request, response }: HttpContextContract) {
     let allArtists
-
     try {
       const queryString = request.param('search')
       const searchString: string = queryString ? queryString.split('+').join(' ') : ''

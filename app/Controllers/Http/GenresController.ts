@@ -20,7 +20,11 @@ export default class GenresController {
   }
 
   public async getGenres() {
-    const genres = await Genre.all()
-    return genres
+    try {
+      const genres = await Genre.all()
+      return genres
+    } catch (err) {
+      return err
+    }
   }
 }
