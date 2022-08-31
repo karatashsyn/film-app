@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams, useLocation } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
-// import ArtistRow from '../components/ArtistRow'
-// import ArtistBoxes from '../components/ArtistBoxes'
 
 function MovieDetails() {
   const currentMovieId = useParams().movieId
@@ -25,16 +23,13 @@ function MovieDetails() {
         setCurrentMovie(data)
         setTitle(data.title)
         setDescription(data.description)
-        console.log(data.artists)
         setSelectedArtists(data.artists)
-        console.log(data.poster_path)
         data.poster_path === 'https://image.tmdb.org/t/p/w500null'
           ? setPosterPath('https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE')
           : setPosterPath(data.poster_path)
 
         setGenresText(data.genres.map((e) => `${e.name}`).join(', '))
         setSelectedGenres(data.genres)
-        console.log(selectedGenres)
       })
       .catch((err) => {
         console.log(err)
@@ -70,15 +65,15 @@ function MovieDetails() {
 
   useEffect(() => {
     fetchGenres()
-    console.log(allGenres)
     fetchMovie()
     fetcArtists('')
-    // del
   }, [])
+
   //Yeni artist ekleyince delete artist butonu initial olarak bu artiste hidden olarak geliyor.
   //Ancak artistleri duzenleme modundayken ekliyoruz ve duzenleme modundayken her artistin uzerinde
   // delete butonu olmali. Bu yuzden artist eklememize dependent olan bir effect ile yeni gelen
   // artistlerin de uzerinde delete butonu olmasini asagidaki effectle sagliyoruz.
+
   useEffect(() => {
     const removeArtistbtns = Array.from(document.getElementsByClassName('remove-artist-btn'))
     if (editMode === true) {
@@ -95,7 +90,6 @@ function MovieDetails() {
   function changeReadonly() {
     const title = document.querySelector('.title')
     const description = document.querySelector('.description-text')
-    console.log(title.getAttribute('readonly'))
     if (!title.readOnly === true) {
       title.readOnly = true
       description.readOnly = true
@@ -214,10 +208,8 @@ function MovieDetails() {
                     onClick={() => {
                       if (!selectedGenres.map((e) => e.id).includes(g.id)) {
                         setSelectedGenres([...selectedGenres, g])
-                        console.log(selectedGenres)
                       } else {
                         setSelectedGenres(selectedGenres.filter((item) => item.id !== g.id))
-                        console.log(selectedGenres)
                       }
                     }}
                     style={{
@@ -248,7 +240,6 @@ function MovieDetails() {
                   <div className="remove-artist-btn-container">
                     <div
                       onClick={() => {
-                        console.log('before ' + selectedArtists)
                         setSelectedArtists(selectedArtists.filter((item) => item.id !== e.id))
                       }}
                       className="remove-artist-btn hidden-remove-artist-btn"

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
-// import ArtistRow from '../components/ArtistRow'
-// import ArtistBoxes from '../components/ArtistBoxes'
 
 function CreateMovie() {
   const [title, setTitle] = useState('')
@@ -14,8 +12,32 @@ function CreateMovie() {
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
   const [saved, setSaved] = useState(false)
-
   const [allGenres, setAllGenres] = useState([])
+
+  function createMovie() {
+    axios.post('/movies', {
+      title: title,
+      description: description,
+      posterPath: posterPath,
+      artistsIds: selectedArtists.map((a) => a.id),
+      genresIds: selectedGenres.map((g) => g.id),
+    })
+  }
+  function openCloseArtistPannel() {
+    const pannel = document.querySelector('.cm-artist-pannel')
+    if (pannel.classList.contains('cm-hidden-artist-pannel')) {
+      pannel.classList.remove('cm-hidden-artist-pannel')
+    } else {
+      pannel.classList.toggle('cm-hidden-artist-pannel')
+    }
+  }
+
+  function alreadyContains(listToBeChecked, elementToBeChecked) {
+    if (listToBeChecked.map((e) => e.id).includes(elementToBeChecked.id)) {
+      return true
+    }
+    return false
+  }
 
   const fetchGenres = async () => {
     fetch('/genres')
@@ -40,7 +62,6 @@ function CreateMovie() {
   useEffect(() => {
     fetchGenres()
     fetcArtists('')
-    // del
   }, [])
 
   //Yeni artist ekleyince delete artist butonu initial olarak bu artiste hidden olarak geliyor.
@@ -58,28 +79,9 @@ function CreateMovie() {
     })
   }, [artistAdded])
 
-  function createMovie() {
-    axios.post('/movies', {
-      title: title,
-      description: description,
-      posterPath: posterPath,
-      artistsIds: selectedArtists.map((a) => a.id),
-      genresIds: selectedGenres.map((g) => g.id),
-    })
-    console.log(title + description + posterPath)
-  }
   useEffect(() => {
     createMovie()
   }, [saved])
-
-  function openCloseArtistPannel() {
-    const pannel = document.querySelector('.cm-artist-pannel')
-    if (pannel.classList.contains('cm-hidden-artist-pannel')) {
-      pannel.classList.remove('cm-hidden-artist-pannel')
-    } else {
-      pannel.classList.toggle('cm-hidden-artist-pannel')
-    }
-  }
 
   return (
     <>
@@ -89,21 +91,20 @@ function CreateMovie() {
             <input
               onChange={(e) => {
                 setTitle(e.target.value)
-                console.log(title)
               }}
+              placeholder="Title"
               className="cm-title"
-              value={title}
               spellCheck="false"
+              value={title}
             />
 
             <input
               onChange={(e) => {
                 setDescription(e.target.value)
-                console.log(description)
               }}
               placeholder="Description"
-              spellCheck="false"
               className="cm-description"
+              spellCheck="false"
               value={description}
             />
 
@@ -112,7 +113,6 @@ function CreateMovie() {
               className="cm-poster-path"
               onChange={(e) => {
                 setPosterPath(e.target.value)
-                console.log(posterPath)
               }}
             ></input>
           </div>
@@ -124,12 +124,10 @@ function CreateMovie() {
                 <div
                   className="cm-genre-box"
                   onClick={() => {
-                    if (!selectedGenres.map((e) => e.id).includes(g.id)) {
+                    if (!alreadyContains(selectedGenres, g)) {
                       setSelectedGenres([...selectedGenres, g])
-                      console.log(selectedGenres)
                     } else {
                       setSelectedGenres(selectedGenres.filter((item) => item.id !== g.id))
-                      console.log(selectedGenres)
                     }
                   }}
                   style={{
@@ -212,22 +210,18 @@ function CreateMovie() {
                   <div className="cm-artist-container">
                     <div
                       onClick={() => {
-                        if (!selectedArtists.map((artist) => artist.id).includes(a.id)) {
+                        if (!alreadyContains(selectedArtists, a)) {
                           setSelectedArtists([...selectedArtists, a])
                         }
                         setArtistAdded(!artistAdded)
                       }}
                       className="cm-artist-box"
                       style={{
-                        pointerEvents: selectedArtists.map((artist) => artist.id).includes(a.id)
-                          ? 'none'
-                          : 'auto',
+                        pointerEvents: alreadyContains(selectedArtists, a) ? 'none' : 'auto',
                       }}
                     >
                       <h3>
-                        {selectedArtists.map((artist) => artist.id).includes(a.id)
-                          ? `✔️  ${a.name}  `
-                          : `${a.name}`}
+                        {alreadyContains(selectedArtists, a) ? `✔️  ${a.name}  ` : `${a.name}`}
                       </h3>
                       <img className="cm-artist-box-image" src={a.profile_path}></img>
                     </div>

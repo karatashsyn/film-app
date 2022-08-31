@@ -11,7 +11,6 @@ function Home() {
     fetch(`/movies/${searchString}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setmovies(data)
       })
   }
@@ -30,7 +29,6 @@ function Home() {
 
   const searchMovies = (e) => {
     fetchMovies(searchKey.replace(' ', '+'))
-    console.log(searchKey.replace(' ', '+'))
   }
 
   const showCategories = () => {
@@ -62,7 +60,6 @@ function Home() {
             type="text"
             onChange={(e) => {
               setSearchKey(e.target.value)
-              console.log(searchKey)
             }}
           ></input>
           <button className="search-btn" onClick={searchMovies}>

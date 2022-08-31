@@ -93,7 +93,6 @@ export default class MoviesController {
       const searchString: string = queryString ? queryString.split('+').join(' ') : ''
       //Check if there is the movie with the exact search string in our database. If not, go to TMDB and try to fetch. If does not exist there either, Do nothing
       let isMatching = await this.exactMatchINDB(searchString)
-      console.log(isMatching)
       if (!isMatching) {
         console.log(`Searching for ${queryString} in TMDB API`)
         await this.addSingleMovieFromTMDB(queryString)

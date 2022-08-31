@@ -45,8 +45,6 @@ export default class ArtistsController {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-
         artistId = data.results[0].id
       })
     await fetch(
