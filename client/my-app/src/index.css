@@ -28,8 +28,7 @@ body {
   z-index: 1;
   display: flex;
   justify-content: space-between;
-  height: 7vh;
-  /* min-height: 70px; */
+  height: 50px;
   width: 100%;
   background: rgba(64, 64, 64, 0.5);
   backdrop-filter: blur(20px);
@@ -125,31 +124,39 @@ body {
   outline: none;
   transition: 0.2s;
   background: #38dc64;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 16px;
   color: white;
 }
 .nav .search-btn:hover {
-  background-color: #000;
+  background-color: rgb(0, 170, 255);
 }
 
 .nav .add-movie-button {
-  display: inline-block;
-  margin: 10px;
-  height: 60%;
-  width: 60px;
-  background-image: url('https://www.freepnglogos.com/uploads/plus-icon/plus-icon-plus-svg-png-icon-download-1.png');
-  background-size: contain;
-  background-repeat: no-repeat;
+  height: 50px;
+  width: 70px;
   cursor: pointer;
-  transition: all 2s;
-  transition-duration: 0.3s;
+  border-style: none;
+  outline: none;
+  transition: 0.2s;
+  background: #38dc64;
+  font-size: 16px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-right: 40px;
 }
 
 .nav .add-movie-button:hover {
-  transform: rotateX(180deg);
+  background-color: #000;
 }
 
+.add-movie-link {
+  text-decoration: none;
+}
 .film-container {
   width: 100%;
   display: grid;
@@ -187,14 +194,21 @@ body {
   /* max-width: 200px; */
   transition: all 0.2s;
   overflow: hidden;
+  border-radius: 4px;
 }
 
 h2 {
   color: white;
+  transition: all 0.2s;
 }
 .film-card:hover img {
-  filter: blur(2px);
-  transform: scale(1.05);
+  /* filter: blur(1px); */
+  transform: scale(1.08);
+  border-radius: 16px;
+}
+.film-card:hover h2 {
+  transform: translateY(-8px);
+  opacity: 0;
 }
 
 /* ----------------------MOVIE-DETAILS PAGE----------------------- */
@@ -341,6 +355,7 @@ h2 {
   background-size: contain;
   background-repeat: no-repeat;
   margin-right: 20px;
+  max-width: 500px;
 }
 
 .info-container {
@@ -765,6 +780,9 @@ h2 {
   height: 10rem;
   display: flex;
 }
+.cm-cast::-webkit-scrollbar {
+  display: none;
+}
 .cm-artist {
   min-width: 90px;
   height: 100%;
@@ -1012,7 +1030,7 @@ h2 {
   #cm-inputs-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
   }
   #cm-relations-container {
     max-width: 50%;

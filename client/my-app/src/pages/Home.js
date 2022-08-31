@@ -65,8 +65,8 @@ function Home() {
           <button className="search-btn" onClick={searchMovies}>
             Search
           </button>
-          <Link to={{ pathname: '/createmovie' }}>
-            <div className="add-movie-button"></div>
+          <Link className="add-movie-link" to={{ pathname: '/createmovie' }}>
+            <div className="add-movie-button">Add</div>
           </Link>
         </div>
         <div>
