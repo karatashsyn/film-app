@@ -1,6 +1,6 @@
 .artist-pannel {
   position: fixed;
-  min-width: 40%;
+  min-width: 40vw;
   max-height: 500px;
   top: 50%;
   left: 50%;
@@ -100,6 +100,7 @@
 }
 .artist-box-image {
   max-height: 100%;
+  height: auto;
 }
 .no-result {
   width: 100%;
@@ -229,8 +230,8 @@
   border: 1px solid white;
   text-align: center;
   overflow: hidden;
-  height: 100%;
-  width: 26%;
+  height: 36px;
+  width: 36px;
   background-color: white;
   border-radius: 24px;
   transition: 0.2s;
@@ -428,7 +429,6 @@
   }
 
   .info-container {
-    /* padding: 0; */
     width: 100%;
   }
   .poster {
@@ -443,6 +443,23 @@
     width: 120px;
     height: 144px;
     margin-right: 24px;
+  }
+  .search-artist-bar-container {
+    flex-direction: column;
+    padding-top: 10px;
+  }
+  .search-artist-bar {
+    min-width: 90%;
+  }
+  .search-artist-button-container {
+    margin-top: 10px;
+    width: 100%;
+  }
+  .search-artist-btn {
+    width: 30%;
+  }
+  .cancel-btn {
+    width: 30%;
   }
 }
 
