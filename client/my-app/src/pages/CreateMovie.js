@@ -15,6 +15,16 @@ function CreateMovie() {
   const [saved, setSaved] = useState(false)
   const [allGenres, setAllGenres] = useState([])
 
+  function inputChecker() {
+    const warnings = []
+    if (title.length < 2) {
+      warnings.push('Title must contain 2 or more characters.')
+    }
+    if (description.length < 12) {
+      warnings.push('Description must contain 12 or more characters.')
+    }
+  }
+
   function createMovie() {
     axios.post('/movies', {
       title: title,

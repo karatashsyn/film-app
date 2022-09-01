@@ -238,6 +238,8 @@
   cursor: pointer;
   transition: all 0.2s;
   text-decoration-style: none;
+  text-decoration: none;
+  color: white;
 }
 .cm-cancel-process-button {
   display: flex;
