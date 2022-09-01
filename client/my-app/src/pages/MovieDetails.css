@@ -1,0 +1,422 @@
+.artist-pannel {
+  position: fixed;
+  min-width: 40%;
+  max-height: 500px;
+  top: 50%;
+  left: 50%;
+  border-radius: 8px;
+  transform: translate(-50%, -50%);
+  overflow-y: scroll;
+  background-color: rgba(64, 64, 64, 0.5);
+  backdrop-filter: blur(30px);
+  transition: all 0.3s;
+  box-shadow: 10px 10px 1000px 20px rgb(0, 0, 0);
+  opacity: 1;
+}
+
+.artist-pannel::-webkit-scrollbar {
+  display: none;
+}
+.hidden-artist-pannel {
+  opacity: 0;
+  display: none;
+}
+.search-artist-bar-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  min-height: 70px;
+}
+
+.search-artist-bar {
+  min-height: 40px;
+  min-width: 60%;
+  max-width: 300px;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  transition: all 0.2s;
+}
+.search-artist-btn {
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 80px;
+  background-color: #000;
+  color: white;
+  text-align: center;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+
+.search-artist-btn:hover {
+  background-color: #ffffff;
+  color: black;
+}
+.search-artist-button-container {
+  width: 30%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.cancel-btn {
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 70px;
+  background-color: #000;
+  color: white;
+  text-align: center;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+.cancel-btn:hover {
+  background-color: #ff6347;
+}
+
+.artist-box {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+  height: 100px;
+  width: 100%;
+
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.artist-box:hover {
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.artist-box-image {
+  max-height: 100%;
+}
+.no-result {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  min-height: 50px;
+}
+.blur-background {
+  display: flex;
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 80%;
+  filter: blur(100px);
+  opacity: 0.5;
+  background: #000;
+}
+
+.main-container {
+  width: 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+
+  color: white;
+  background: rgba(0, 0, 0, 0);
+}
+
+.poster {
+  /* min-width: auto; */
+  /* height: auto; */
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 20px;
+  max-width: 500px;
+}
+
+.info-container {
+  width: 60%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.except-cast {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 70%;
+}
+
+.first-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  height: 20%;
+}
+.title {
+  width: 75%;
+  border-style: none;
+  outline: none;
+  background: rgba(0, 0, 0, 0);
+  color: white;
+  /* position: relative; */
+  font-size: 44px;
+  text-overflow: ellipsis;
+}
+.buttons {
+  font-size: 20px;
+  width: 150px;
+  display: flex;
+  height: 36px;
+  justify-content: space-between;
+}
+.edit-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2px;
+  border: 1px solid white;
+  overflow: hidden;
+  width: 64%;
+  border-radius: 24px;
+  color: white;
+  transition: 0.4s;
+  cursor: pointer;
+  /* display: none; */
+}
+.edit-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+.save-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2px;
+  border: none;
+  overflow: hidden;
+  width: 64%;
+  border-radius: 24px;
+  background-color: #38dc64;
+  color: white;
+  transition: 0.4s;
+  cursor: pointer;
+  animation-duration: 3s;
+  color: black;
+}
+.save-btn:hover {
+  background-color: #38dc64;
+}
+.nonclickable {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.delete-btn {
+  border: 1px solid white;
+  text-align: center;
+  overflow: hidden;
+  height: 100%;
+  width: 26%;
+  background-color: white;
+  border-radius: 24px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.delete-btn:hover {
+  border: none;
+  background-color: tomato;
+}
+
+.inactive-delete-movie {
+  pointer-events: none;
+}
+
+.genres-text {
+  height: 10%;
+  font-size: 20px;
+}
+.genres-pannel {
+  position: relative;
+  display: flex;
+  background: rgba(64, 64, 64, 0.5);
+  width: 100%;
+  border-radius: 2px;
+  color: white;
+  transition: all 0.2s;
+  margin-top: 8px;
+  overflow-y: hidden;
+  overflow: scroll;
+  height: 90px;
+  flex-wrap: wrap;
+}
+.hidden-genres-pannel {
+  height: 0;
+}
+.genres-pannel::-webkit-scrollbar {
+  display: none;
+}
+.genre-box {
+  margin: 4px;
+  padding: 2px 8px 2px 8px;
+  height: 24px;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: rgb(64, 64, 64);
+  border-radius: 16px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.description-block {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 70%;
+}
+.description-text {
+  overflow-x: scroll;
+  height: 200px;
+  text-align: left;
+  font-size: 20px;
+  outline: none;
+  border-style: none;
+}
+.description-block::-webkit-scrollbar {
+  display: none;
+}
+.description-text::-webkit-scrollbar {
+  display: none;
+}
+.description-text {
+  border-style: none;
+  text-justify: distribute;
+  color: white;
+  background-color: rgba(0, 0, 0, 0);
+}
+.cast {
+  height: 40%;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: visible;
+}
+.cast::-webkit-scrollbar {
+  display: none;
+}
+.artist {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  min-width: 140px;
+  background-size: contain;
+  margin-right: 30px;
+  height: 100%;
+  text-align: center;
+  color: white;
+  transition: all 0.2s;
+  justify-content: center;
+  align-items: center;
+}
+
+.artist .artist-photo {
+  width: 150px;
+  height: 180px;
+  /* background-image: url('https://cdn.wallpapersafari.com/76/7/wklvAb.jpg'); */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.artist .artist-photo:hover {
+  transform: translateY(-2px);
+}
+
+.add-artist {
+  opacity: 0.5;
+  transition: all 0.3s;
+}
+.add-artist:hover {
+  opacity: 1;
+}
+.add-artist .artist-photo {
+  background-image: url('https://cdn5.vectorstock.com/i/thumb-large/45/59/profile-photo-placeholder-icon-design-in-gray-vector-37114559.jpg');
+}
+.hidden-add-btn {
+  pointer-events: none;
+  opacity: 0;
+}
+.remove-artist-btn-container {
+  padding: 0 4px 0 4px;
+  width: 100%;
+  /* height: 30px; */
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: center;
+}
+.remove-artist-btn {
+  padding: 0 4px 4px 4px;
+  width: 60%;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  background-color: rgba(64, 64, 64, 0.5);
+  margin-bottom: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+  border-radius: 16px;
+  opacity: 1;
+}
+.remove-artist-btn:hover {
+  background-color: tomato;
+}
+
+.hidden-remove-artist-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fake-remove-artist-btn {
+  padding: 0 4px 0 4px;
+  width: 60%;
+  height: 42px;
+  width: 50px;
+  margin-bottom: 4px;
+  transition: all 0.2s;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fake-details-body {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 30px 20px;
+  background-size: cover;
+}
+.fake-details-body::-webkit-scrollbar {
+  display: none;
+}

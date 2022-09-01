@@ -1,0 +1,324 @@
+.cm-body {
+  color: white;
+  padding: 0px;
+  margin: 0;
+}
+.cm-container {
+  padding: 1rem;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
+}
+.cm-title,
+.cm-description,
+.cm-poster-path {
+  outline: none;
+  height: 3rem;
+  margin-bottom: 20px;
+  width: 90%;
+  /* min-width: 320px; */
+  border-radius: 8px;
+  border-style: none;
+  padding: 0 4px;
+  background-color: rgb(63, 63, 63);
+  color: white;
+  font-size: 1.5rem;
+}
+.cm-body h2 {
+  margin: 20px 0;
+}
+
+.cm-genre-box {
+  display: inline-block;
+  text-align: center;
+  height: min-content;
+  margin: 4px 4px;
+  padding: 2px 10px;
+  transition: all 0.2s;
+  cursor: pointer;
+  border-radius: 16px;
+}
+
+.cm-cast {
+  overflow-x: scroll;
+  border: 2px solid black;
+  width: 100%;
+  margin-top: 20px;
+  height: 10rem;
+  display: flex;
+}
+.cm-cast::-webkit-scrollbar {
+  display: none;
+}
+.cm-artist {
+  min-width: 90px;
+  height: 100%;
+  width: 6rem;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s;
+}
+.cm-remove-artist-btn-container {
+  flex-basis: 10%;
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cm-remove-artist-btn {
+  height: 100%;
+  width: 80%;
+  padding: 2px 4px;
+  text-align: center;
+  border-radius: 12px;
+  background-color: rgba(64, 64, 64, 0.6);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.cm-remove-artist-btn:hover {
+  background-color: tomato;
+}
+.cm-artist-photo {
+  flex-basis: 80%;
+  max-width: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all 0.2s;
+}
+.cm-add-artist {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cm-add-artist:hover {
+  transform: translateY(-20px);
+}
+.cm-fake-remove-artist-btn-container {
+  flex-basis: 100%;
+}
+
+.cm-add-artist-photo {
+  max-width: 96px;
+  min-height: 123px;
+  flex-basis: 100%;
+  background-image: url('https://cdn5.vectorstock.com/i/thumb-large/45/59/profile-photo-placeholder-icon-design-in-gray-vector-37114559.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.cm-artist-pannel {
+  position: fixed;
+  width: 80%;
+  max-width: 1000px;
+  max-height: 500px;
+  top: 50%;
+  left: 50%;
+  border-radius: 8px;
+  transform: translate(-50%, -50%);
+  overflow-y: scroll;
+  background-color: rgba(64, 64, 64, 0.5);
+  backdrop-filter: blur(30px);
+  transition: all 0.3s;
+  box-shadow: 10px 10px 1000px 20px rgb(0, 0, 0);
+  opacity: 1;
+}
+.cm-hidden-artist-pannel {
+  display: none;
+}
+.cm-search-artist-bar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  min-height: 70px;
+}
+
+.cm-search-artist-bar {
+  margin-top: 20px;
+  min-height: 40px;
+  width: 100%;
+  max-width: 300px;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  transition: all 0.2s;
+}
+
+.cm-search-artist-btn:hover {
+  background-color: #ffffff;
+  color: black;
+}
+.cm-search-artist-button-container {
+  margin-top: 20px;
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.cm-search-artist-btn {
+  min-width: 120px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 80px;
+  background-color: #000;
+  color: white;
+  text-align: center;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+
+.cm-cancel-btn {
+  min-width: 120px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: #000;
+  color: white;
+  text-align: center;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+.cm-cancel-btn:hover {
+  background-color: #ff6347;
+}
+
+.cm-artist-box {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+  height: 100px;
+  width: 100%;
+
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cm-artist-box:hover {
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.cm-artist-box-image {
+  max-height: 100%;
+}
+.cm-no-result {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  min-height: 50px;
+}
+#cm-buttons-container {
+  display: flex;
+  flex-direction: column;
+}
+.cm-save-movie-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  width: 70%;
+  max-width: 500px;
+  height: 4rem;
+  background-color: #38dc64;
+  margin-bottom: 1.2rem;
+  border-radius: 32px;
+  display: flex;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cm-cancel-process-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  text-align: center;
+  width: 70%;
+  max-width: 500px;
+  height: 4rem;
+  background-color: gray;
+  border-radius: 32px;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.cm-cancel-process-button:hover {
+  transform: scale(1.05);
+}
+.cm-save-movie-button:hover {
+  transform: scale(1.05);
+}
+
+@media screen and (min-width: 700px) {
+  .cm-genre-box {
+    font-size: 1.4rem;
+    margin: 0.2em 0.2em;
+  }
+  .cm-search-artist-bar-container {
+    flex-direction: row;
+  }
+  .cm-genres-pannel {
+    margin-bottom: 4rem;
+  }
+  .cm-body h2 {
+    margin: 0 0 4rem 0;
+  }
+  .cm-search-artist-button-container {
+    min-width: 270px;
+    width: 30%;
+    justify-content: space-around;
+  }
+  .cm-search-artist-bar {
+    max-width: none;
+    width: 60%;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .cm-body h2 {
+    margin: 0 0 4rem 0;
+    font-size: 2em;
+  }
+  .cm-genres-pannel {
+    margin-bottom: 2rem;
+  }
+  .cm-body {
+    padding: 6rem;
+  }
+  #cm-inputs-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  #cm-relations-container {
+    max-width: 50%;
+  }
+  .cm-splitter {
+    display: flex;
+  }
+  .cm-container {
+    flex-basis: 100%;
+  }
+
+  .cm-title,
+  .cm-description,
+  .cm-poster-path {
+    height: 4rem;
+
+    /* min-width: 320px; */
+
+    font-size: 2rem;
+  }
+}

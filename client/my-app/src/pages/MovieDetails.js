@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
-
+import './MovieDetails.css'
+const TMDB_NULL_IMG_URL = 'https://image.tmdb.org/t/p/w500null'
+const NULL_IMG_PLACE_HOLDER = 'https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE'
 function MovieDetails() {
   const currentMovieId = useParams().movieId
   const [currentMovie, setCurrentMovie] = useState({})
@@ -24,8 +26,8 @@ function MovieDetails() {
         setTitle(data.title)
         setDescription(data.description)
         setSelectedArtists(data.artists)
-        data.poster_path === 'https://image.tmdb.org/t/p/w500null'
-          ? setPosterPath('https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE')
+        data.poster_path === TMDB_NULL_IMG_URL
+          ? setPosterPath(NULL_IMG_PLACE_HOLDER)
           : setPosterPath(data.poster_path)
 
         setGenresText(data.genres.map((e) => `${e.name}`).join(', '))
@@ -55,10 +57,6 @@ function MovieDetails() {
     setGenresText(selectedGenres.map((e) => `${e.name}`).join(', '))
   }, [selectedGenres])
 
-  // const fetchCategories = async()=>{
-  //   fetch('/')
-  // }
-
   const searchArtists = () => {
     fetcArtists(searchKey.split(' ').join('+'))
   }
@@ -76,15 +74,9 @@ function MovieDetails() {
 
   useEffect(() => {
     const removeArtistbtns = Array.from(document.getElementsByClassName('remove-artist-btn'))
-    if (editMode === true) {
-      removeArtistbtns.forEach((element) => {
-        element.classList.remove('hidden-remove-artist-btn')
-      })
-    } else {
-      removeArtistbtns.forEach((element) => {
-        element.classList.toggle('hidden-remove-artist-btn')
-      })
-    }
+    removeArtistbtns.forEach((element) => {
+      element.classList.remove('hidden-remove-artist-btn')
+    })
   }, [artistAdded])
 
   function changeReadonly() {
@@ -151,20 +143,10 @@ function MovieDetails() {
   function openCloseArtistPannel() {
     const saveBtn = document.querySelector('.edit-btn')
     const deleteBtn = document.querySelector('.delete-btn')
-
-    if (saveBtn.classList.contains('nonclickable')) {
-      saveBtn.classList.remove('nonclickable')
-      deleteBtn.classList.remove('nonclickable')
-    } else {
-      deleteBtn.classList.toggle('nonclickable')
-      saveBtn.classList.toggle('nonclickable')
-    }
     const pannel = document.querySelector('.artist-pannel')
-    if (pannel.classList.contains('hidden-artist-pannel')) {
-      pannel.classList.remove('hidden-artist-pannel')
-    } else {
-      pannel.classList.toggle('hidden-artist-pannel')
-    }
+    saveBtn.classList.toggle('nonclickable')
+    deleteBtn.classList.toggle('nonclickable')
+    pannel.classList.toggle('hidden-artist-pannel')
   }
   return (
     <>

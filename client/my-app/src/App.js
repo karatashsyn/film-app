@@ -2,7 +2,6 @@ import Movies from './components/Movie'
 import Home from './pages/Home'
 import MovieDetails from './pages/MovieDetails'
 import ArtistDetails from './pages/ArtistDetails'
-import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import CreateMovie from './pages/CreateMovie'
 function App() {

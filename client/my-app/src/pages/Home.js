@@ -1,6 +1,7 @@
 import Movies from './../components/Movie'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import './Home.css'
 
 function Home() {
   const [movies, setmovies] = useState([])
@@ -43,16 +44,58 @@ function Home() {
   const bringAll = () => {
     fetchMovies('')
   }
+  const showHideButtonsPannel = () => {
+    const pannel = document.querySelector('.buttons-pannel')
+    pannel.classList.toggle('hidden-buttons-pannel')
+  }
+  let widthMatch = window.matchMedia('(min-width: 564px)')
+  widthMatch.addEventListener('change', () => {
+    console.log('changed')
+    if (widthMatch.matches) {
+      console.log(true)
+      const pannel = document.querySelector('.buttons-pannel')
+      pannel.classList.toggle('hidden-buttons-pannel')
+    } else {
+      console.log(false)
+    }
+  })
 
   return (
     <div className="App">
       <div className="home-body">
         <div className="nav">
-          <div className="categories-button" onMouseOver={showCategories}>
-            Categories
+          <div className="buttons-pannel-icon" onClick={showHideButtonsPannel}>
+            {' '}
           </div>
-          <div className="all-movies-btn" onClick={bringAll}>
-            All
+          <div className="buttons-pannel hidden-buttons-pannel">
+            <div className="pannel-all-movies-btn" onClick={bringAll}>
+              All
+            </div>
+
+            <Link className="add-movie-link" to={{ pathname: '/createmovie' }}>
+              <div className="pannel-add-movie-button">Add</div>
+            </Link>
+            <div className="pannel-categories-button">
+              Categories
+              {categories.map((c) => (
+                <div className="category-box" key={c.id}>
+                  {c.name}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="nav-buttons-container">
+            <div className="categories-button" onMouseOver={showCategories}>
+              Categories
+            </div>
+            <div className="all-movies-btn" onClick={bringAll}>
+              All
+            </div>
+
+            <Link className="add-movie-link" to={{ pathname: '/createmovie' }}>
+              <div className="add-movie-button">Add</div>
+            </Link>
           </div>
 
           <input
@@ -65,14 +108,13 @@ function Home() {
           <button className="search-btn" onClick={searchMovies}>
             Search
           </button>
-          <Link className="add-movie-link" to={{ pathname: '/createmovie' }}>
-            <div className="add-movie-button">Add</div>
-          </Link>
         </div>
         <div>
           <div onMouseLeave={hideCategories} className="categories">
             {categories.map((c) => (
-              <div key={c.id}>{c.name}</div>
+              <div className="category-box" key={c.id}>
+                {c.name}
+              </div>
             ))}
           </div>
         </div>

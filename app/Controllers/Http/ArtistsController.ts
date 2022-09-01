@@ -2,8 +2,9 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { artistValidator } from 'App/utils/artistValidator'
 import Artist from 'App/Models/Artist'
 import fetch from 'node-fetch'
-import Movie from 'App/Models/Movie'
 const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w500'
+const ARTIST_SEARCH_BASE_URL =
+  'https://api.themoviedb.org/3/search/person?api_key=d54de950ca880b236aa90854632983ca&query='
 
 export default class ArtistsController {
   public async createArtist({ request }: HttpContextContract) {
@@ -40,9 +41,7 @@ export default class ArtistsController {
     if (!queryString) {
       return
     }
-    await fetch(
-      `https://api.themoviedb.org/3/search/person?api_key=d54de950ca880b236aa90854632983ca&query=${queryString}`
-    )
+    await fetch(`${ARTIST_SEARCH_BASE_URL}${queryString}`)
       .then((res) => res.json())
       .then((data) => {
         artistId = data.results[0].id

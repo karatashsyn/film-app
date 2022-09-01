@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import './ArtistDetails.css'
 
 function ArtistDetails() {
   const currentArtistId = useParams().artistId
