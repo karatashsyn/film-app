@@ -1,7 +1,6 @@
 .artist-pannel {
   position: fixed;
   min-width: 40vw;
-  max-height: 500px;
   top: 50%;
   left: 50%;
   border-radius: 8px;
@@ -141,7 +140,7 @@
   min-width: 440px;
   width: 28%;
   /* display: block; */
-  /* height: auto; */
+  height: auto;
   transition: all 0.2s;
 }
 
@@ -286,18 +285,19 @@
 }
 
 .description-block {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   height: 70%;
 }
 .description-text {
   overflow-x: scroll;
-  height: 200px;
+  height: 180px;
   text-align: left;
   font-size: 20px;
   outline: none;
   border-style: none;
+  margin-top: 10px;
 }
 .description-block::-webkit-scrollbar {
   display: none;
