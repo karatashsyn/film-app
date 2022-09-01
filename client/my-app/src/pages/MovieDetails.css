@@ -355,6 +355,8 @@
 .add-artist {
   opacity: 0.5;
   transition: all 0.3s;
+  width: 150px;
+  height: 260px;
 }
 .add-artist:hover {
   opacity: 1;
@@ -401,7 +403,7 @@
 .fake-remove-artist-btn {
   padding: 0 4px 0 4px;
   width: 60%;
-  height: 42px;
+  height: 32px;
   width: 50px;
   margin-bottom: 4px;
   transition: all 0.2s;

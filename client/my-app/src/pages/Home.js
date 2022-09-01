@@ -48,15 +48,15 @@ function Home() {
     const pannel = document.querySelector('.buttons-pannel')
     pannel.classList.toggle('hidden-buttons-pannel')
   }
+  // After we increased the width of the window. We should close the button-pannels. So I used the way below
   let widthMatch = window.matchMedia('(min-width: 564px)')
   widthMatch.addEventListener('change', () => {
     console.log('changed')
     if (widthMatch.matches) {
-      console.log(true)
       const pannel = document.querySelector('.buttons-pannel')
-      pannel.classList.toggle('hidden-buttons-pannel')
-    } else {
-      console.log(false)
+      if (!pannel.classList.contains('hidden-buttons-pannel')) {
+        pannel.classList.add('hidden-buttons-pannel')
+      }
     }
   })
 

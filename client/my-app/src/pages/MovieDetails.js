@@ -79,17 +79,17 @@ function MovieDetails() {
     })
   }, [artistAdded])
 
-  function changeReadonly() {
+  function changeReadonlyAndInnerTexts() {
+    const editBtn = document.querySelector('.edit-btn')
     const title = document.querySelector('.title')
     const description = document.querySelector('.description-text')
-    if (!title.readOnly === true) {
-      title.readOnly = true
-      description.readOnly = true
+    title.readOnly = !editMode
+    description.readOnly = !editBtn
+    if (editMode) {
+      editBtn.innerHTML = 'Save'
     } else {
-      title.readOnly = false
-      description.readOnly = false
+      editBtn.innerHTML = 'Edit'
     }
-
     title.focus()
   }
   function updateMovie() {
@@ -106,40 +106,22 @@ function MovieDetails() {
     axios.delete(`/movies/${currentMovieId}`)
   }
 
-  function switchBetweenEditAndSave() {
+  useEffect(() => {
+    changeReadonlyAndInnerTexts()
     const editBtn = document.querySelector('.edit-btn')
     const deleteBtn = document.querySelector('.delete-btn')
     const addArtistBtn = document.querySelector('.add-artist')
     const genresPannel = document.querySelector('.genres-pannel')
     const removeArtistbtns = Array.from(document.getElementsByClassName('remove-artist-btn'))
-    console.log(removeArtistbtns)
-    if (editMode === true) {
-      setEditMode(false)
-      editBtn.classList.remove('save-btn')
-      editBtn.innerHTML = 'Edit'
-      deleteBtn.classList.toggle('inactive-delete-movie')
-      addArtistBtn.classList.toggle('hidden-add-btn')
-      genresPannel.classList.toggle('hidden-genres-pannel')
-      removeArtistbtns.forEach((element) => {
-        element.classList.toggle('hidden-remove-artist-btn')
-      })
-      updateMovie()
-    } else {
-      setEditMode(true)
-      editBtn.classList.toggle('save-btn')
-      editBtn.innerHTML = 'Save'
-      deleteBtn.classList.remove('inactive-delete-movie')
-      addArtistBtn.classList.remove('hidden-add-btn')
-      genresPannel.classList.remove('hidden-genres-pannel')
-      removeArtistbtns.forEach((element) => {
-        element.classList.remove('hidden-remove-artist-btn')
-      })
-    }
-  }
-  function editBtnFunctions() {
-    changeReadonly()
-    switchBetweenEditAndSave()
-  }
+    editBtn.classList.toggle('save-btn')
+    deleteBtn.classList.toggle('inactive-delete-movie')
+    addArtistBtn.classList.toggle('hidden-add-btn')
+    genresPannel.classList.toggle('hidden-genres-pannel')
+    removeArtistbtns.forEach((element) => {
+      element.classList.toggle('hidden-remove-artist-btn')
+    })
+  }, [editMode])
+
   function openCloseArtistPannel() {
     const saveBtn = document.querySelector('.edit-btn')
     const deleteBtn = document.querySelector('.delete-btn')
@@ -170,7 +152,15 @@ function MovieDetails() {
                   spellCheck="false"
                 />
                 <div className="buttons">
-                  <div onClick={editBtnFunctions} className="edit-btn">
+                  <div
+                    onClick={() => {
+                      if (editMode) {
+                        updateMovie()
+                      }
+                      setEditMode(!editMode)
+                    }}
+                    className="edit-btn"
+                  >
                     Edit
                   </div>
                   <Link
