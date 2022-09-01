@@ -48,6 +48,17 @@ function Home() {
     const pannel = document.querySelector('.buttons-pannel')
     pannel.classList.toggle('hidden-buttons-pannel')
   }
+  const hideButtonsPannel = () => {
+    const pannel = document.querySelector('.buttons-pannel')
+    pannel.classList.add('hidden-buttons-pannel')
+  }
+  const showHidePannelCategories = () => {
+    const pannelCategories = document.querySelector('.pannel-categories-container')
+    const pannelCategoriesBtn = document.querySelector('.pannel-categories-button')
+
+    pannelCategories.classList.toggle('hidden-pannel-categories-container')
+    pannelCategoriesBtn.classList.toggle('activated')
+  }
   // After we increased the width of the window. We should close the button-pannels. So I used the way below
   let widthMatch = window.matchMedia('(min-width: 564px)')
   widthMatch.addEventListener('change', () => {
@@ -64,21 +75,25 @@ function Home() {
     <div className="App">
       <div className="home-body">
         <div className="nav">
-          <div className="buttons-pannel-icon" onClick={showHideButtonsPannel}>
-            {' '}
-          </div>
+          <div className="buttons-pannel-icon" onClick={showHideButtonsPannel}></div>
           <div className="buttons-pannel hidden-buttons-pannel">
-            <div className="pannel-all-movies-btn" onClick={bringAll}>
+            <div className="pannel-all-movies-btn btn" onClick={bringAll}>
               All
             </div>
-
             <Link className="add-movie-link" to={{ pathname: '/createmovie' }}>
-              <div className="pannel-add-movie-button">Add</div>
+              <div className="pannel-add-movie-button btn">Add</div>
             </Link>
-            <div className="pannel-categories-button">
+            <div
+              className="pannel-categories-button btn"
+              onClick={() => {
+                showHidePannelCategories()
+              }}
+            >
               Categories
+            </div>
+            <div className="pannel-categories-container hidden-pannel-categories-container ">
               {categories.map((c) => (
-                <div className="category-box" key={c.id}>
+                <div className="pannel-category-box" key={c.id}>
                   {c.name}
                 </div>
               ))}
@@ -104,8 +119,15 @@ function Home() {
             onChange={(e) => {
               setSearchKey(e.target.value)
             }}
+            onClick={hideButtonsPannel}
           ></input>
-          <button className="search-btn" onClick={searchMovies}>
+          <button
+            className="search-btn"
+            onClick={() => {
+              hideButtonsPannel()
+              searchMovies()
+            }}
+          >
             Search
           </button>
         </div>
@@ -119,7 +141,7 @@ function Home() {
           </div>
         </div>
 
-        <div>
+        <div onClick={hideButtonsPannel}>
           <Movies movies={movies} />
         </div>
       </div>

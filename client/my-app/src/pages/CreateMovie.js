@@ -175,9 +175,13 @@ function CreateMovie() {
           </div>
         </div>
         <div className="cm-container" id="cm-buttons-container">
-          <div onClick={() => setSaved(!saved)} className="cm-save-movie-button">
+          <Link
+            onClick={() => setSaved(!saved)}
+            className="cm-save-movie-button"
+            to={{ pathname: '/' }}
+          >
             Save
-          </div>
+          </Link>
 
           <Link to={{ pathname: '/' }} className="cm-cancel-process-button">
             {' '}

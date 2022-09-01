@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { movieValidator } from 'App/utils/movieValidator'
 import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
+import DeletedMovie from 'App/Models/DeletedMovie'
 const TMDB_SEARCH_MOVIE_BASE_URL =
   'https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query='
 
@@ -26,7 +27,14 @@ export default class MoviesController {
     console.log('exact match')
     return true
   }
-
+  public async isDeleted(movieTmdbId) {
+    const targetMovie = await DeletedMovie.findBy('tmdb_id', movieTmdbId)
+    if (targetMovie) {
+      return true
+    } else {
+      return false
+    }
+  }
   //Info Decoder coming from url which contains infos for the purpose of adding relation between Movie and Artist
   public pairInfoEncoder(infoString) {
     const pairs = infoString.split('&')
@@ -61,10 +69,12 @@ export default class MoviesController {
           description: TMDbMovie.overview,
           posterPath: 'https://image.tmdb.org/t/p/w500' + TMDbMovie.poster_path,
         })
-        await movieToBeAdded.save()
-        Movie.$getRelation('genres')?.boot()
-        await movieToBeAdded.related('genres').sync(TMDBMovieGenreIds)
-        return movieToBeAdded.$attributes
+        if (!(await this.isDeleted(movieToBeAdded.tmdbId))) {
+          await movieToBeAdded.save()
+          Movie.$getRelation('genres')?.boot()
+          await movieToBeAdded.related('genres').sync(TMDBMovieGenreIds)
+          return movieToBeAdded.$attributes
+        }
       }
     } else {
       console.log('There is no such movie')
@@ -140,7 +150,14 @@ export default class MoviesController {
   public async deleteMovie({ request }: HttpContextContract) {
     try {
       const currentMovieId = request.param('movieId')
-      await Movie.query().where('id', currentMovieId).delete()
+      const movieToBeDeleted = await Movie.find(currentMovieId)
+      await movieToBeDeleted!.delete()
+
+      if (movieToBeDeleted!.tmdbId) {
+        const deletedMovie = new DeletedMovie()
+        deletedMovie.tmdbId = movieToBeDeleted!.tmdbId
+        deletedMovie.save()
+      }
     } catch (err) {
       return err
     }
