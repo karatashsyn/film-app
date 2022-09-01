@@ -429,7 +429,11 @@
   }
 
   .info-container {
+    margin-top: 40px;
     width: 100%;
+  }
+  .artist {
+    text-align: center;
   }
   .poster {
     width: 100%;
@@ -437,12 +441,12 @@
     margin: 0 10px;
   }
   .artist {
-    margin-right: 10px;
+    margin-right: 12px;
   }
   .artist .artist-photo {
-    width: 120px;
-    height: 144px;
-    margin-right: 24px;
+    /* width: 120px;
+    height: 144px; */
+    /* margin-right: 24px; */
   }
   .search-artist-bar-container {
     flex-direction: column;
@@ -469,5 +473,21 @@
   }
   .info-container {
     width: 100%;
+    /* text-align: center; */
+  }
+  .genres-text {
+    margin-top: 20px;
+  }
+
+  .title {
+    width: 100%;
+    font-size: 1.8rem;
+  }
+
+  .genres-text {
+    font-size: 1rem;
+  }
+  .description-text {
+    font-size: 1.2rem;
   }
 }
