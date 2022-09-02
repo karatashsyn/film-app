@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './CreateMovie.css'
+import CmCastArtists from '../components/CmCastArtists'
+import CmPannelArtists from '../components/CmPannelArtists'
+import CmGenreBox from '../components/CmGenreBox'
 
 function CreateMovie() {
   const [title, setTitle] = useState('')
@@ -150,49 +153,19 @@ function CreateMovie() {
           <div className="cm-container" id="cm-relations-container">
             <h2>Categories</h2>
             <div className="cm-genres-pannel">
-              {allGenres.map((g) => (
-                <div
-                  className="cm-genre-box"
-                  onClick={() => {
-                    if (!alreadyContains(selectedGenres, g)) {
-                      setSelectedGenres([...selectedGenres, g])
-                    } else {
-                      setSelectedGenres(selectedGenres.filter((item) => item.id !== g.id))
-                    }
-                  }}
-                  style={{
-                    backgroundColor: selectedGenres.map((e) => e.id).includes(g.id)
-                      ? '#0587ff'
-                      : 'rgb(64,64,64)',
-                  }}
-                >
-                  {g.name}
-                </div>
-              ))}
+              <CmGenreBox
+                allGenres={allGenres}
+                selectedGenres={selectedGenres}
+                setSelectedGenres={setSelectedGenres}
+                alreadyContains={alreadyContains}
+              />
             </div>
             <h2>Cast</h2>
             <div className="cm-cast">
-              {selectedArtists.map((e) => (
-                <div className="cm-artist">
-                  <div className="cm-remove-artist-btn-container">
-                    <div
-                      onClick={() => {
-                        setSelectedArtists(selectedArtists.filter((item) => item.id !== e.id))
-                      }}
-                      className="cm-remove-artist-btn cm-hidden-remove-artist-btn"
-                    >
-                      Delete
-                    </div>
-                  </div>
-
-                  <div
-                    className="cm-artist-photo"
-                    style={{ backgroundImage: `url(${e.profile_path})` }}
-                  ></div>
-
-                  {/* <p className="cm-artist-name">{e.name}</p> */}
-                </div>
-              ))}
+              <CmCastArtists
+                selectedArtists={selectedArtists}
+                setSelectedArtists={setSelectedArtists}
+              />
 
               <div className="cm-artist cm-add-artist " onClick={openCloseArtistPannel}>
                 <div className="cm-remove-artist-btn-container cm-fake-remove-artist-btn-container">
@@ -239,35 +212,14 @@ function CreateMovie() {
               </button>
             </div>
           </div>
-          <>
-            {searchedArtists.length >= 1 ? (
-              searchedArtists.map((a) => (
-                <div>
-                  <div className="cm-artist-container">
-                    <div
-                      onClick={() => {
-                        if (!alreadyContains(selectedArtists, a)) {
-                          setSelectedArtists([...selectedArtists, a])
-                        }
-                        setArtistAdded(!artistAdded)
-                      }}
-                      className="cm-artist-box"
-                      style={{
-                        pointerEvents: alreadyContains(selectedArtists, a) ? 'none' : 'auto',
-                      }}
-                    >
-                      <h3>
-                        {alreadyContains(selectedArtists, a) ? `✔️  ${a.name}  ` : `${a.name}`}
-                      </h3>
-                      <img className="cm-artist-box-image" src={a.profile_path}></img>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="cm-no-result">No Result</div>
-            )}
-          </>
+          <CmPannelArtists
+            searchedArtists={searchedArtists}
+            selectedArtists={selectedArtists}
+            alreadyContains={alreadyContains}
+            setSelectedArtists={setSelectedArtists}
+            setArtistAdded={setArtistAdded}
+            artistAdded={artistAdded}
+          />
         </div>
       </div>
     </>

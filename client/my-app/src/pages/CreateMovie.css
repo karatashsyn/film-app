@@ -21,7 +21,7 @@
   padding: 2rem;
   max-width: 70vw;
   min-width: 240px;
-  /* min-height: 30vh; */
+  min-height: 30vh;
   background: rgba(182, 182, 182, 0.5);
   backdrop-filter: blur(200px);
   position: fixed;
@@ -29,7 +29,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
-  font-size: 1rem;
+  font-size: 1.4rem;
   border-radius: 12px;
 }
 .warning-row {
@@ -126,11 +126,14 @@
 }
 .cm-artist-photo {
   flex-basis: 80%;
-  max-width: 100%;
+  max-width: 96px;
+  height: 124px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   transition: all 0.2s;
+  /*  */
+  /*  */
 }
 .cm-add-artist {
   cursor: pointer;

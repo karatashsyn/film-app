@@ -22,11 +22,7 @@ function ArtistDetails() {
         <div className="ad-splitter">
           <section className="ad-section ad-basic-infos">
             <div className="ad-container">
-              <img
-                className="ad-profile-photo"
-                src={currentArtist.profile_path}
-                alt="photo of the artist"
-              />
+              <img alt="Artist" className="ad-profile-photo" src={currentArtist.profile_path} />
               <h1 className="ad-name">{currentArtist.name}</h1>
               <h3 className="ad-place-of-birth">{currentArtist.place_of_birth}</h3>
             </div>
