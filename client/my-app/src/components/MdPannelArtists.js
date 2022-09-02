@@ -31,7 +31,7 @@ function PannelArtists({
                       ? `✔️  ${a.name}  `
                       : `${a.name}`}
                   </h3>
-                  <img className="artist-box-image" src={a.profile_path}></img>
+                  <img alt="Artist" className="artist-box-image" src={a.profile_path}></img>
                 </div>
               </div>
             </div>

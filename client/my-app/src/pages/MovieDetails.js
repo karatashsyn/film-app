@@ -132,7 +132,7 @@ function MovieDetails() {
     removeArtistbtns.forEach((element) => {
       element.classList.toggle('hidden-remove-artist-btn')
     })
-    fetchMovie()
+    // fetchMovie()
   }, [editMode])
 
   function openCloseArtistPannel() {
