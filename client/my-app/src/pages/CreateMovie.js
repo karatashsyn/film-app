@@ -83,25 +83,6 @@ function CreateMovie() {
     fetcArtists(searchKey.split(' ').join('+'))
   }
 
-  // useEffect(() => {
-  //   fetcArtists('')
-  // }, [])
-
-  //Yeni artist ekleyince delete artist butonu initial olarak bu artiste hidden olarak geliyor.
-  //Ancak artistleri duzenleme modundayken ekliyoruz ve duzenleme modundayken her artistin uzerinde
-  // delete butonu olmali. Bu yuzden artist eklememize dependent olan bir effect ile yeni gelen
-  // artistlerin de uzerinde delete butonu olmasini asagidaki effectle sagliyoruz.
-  useEffect(() => {
-    const removeArtistbtns = Array.from(document.getElementsByClassName('cm-remove-artist-btn'))
-    removeArtistbtns.forEach((element) => {
-      if (element.classList.contains('cm-hidden-remove-artist-btn')) {
-        element.classList.remove('cm-hidden-remove-artist-btn')
-      } else {
-        element.classList.toggle('cm-hidden-remove-artist-btn')
-      }
-    })
-  }, [artistAdded])
-
   return (
     <>
       <div className="error-pannel hidden-error-pannel">

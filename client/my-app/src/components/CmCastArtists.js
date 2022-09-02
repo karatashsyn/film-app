@@ -6,10 +6,10 @@ function CmCastArtists({ selectedArtists, setSelectedArtists }) {
         <div className="cm-artist">
           <div className="cm-remove-artist-btn-container">
             <div
+              className="cm-remove-artist-btn"
               onClick={() => {
                 setSelectedArtists(selectedArtists.filter((item) => item.id !== e.id))
               }}
-              className="cm-remove-artist-btn hidden-remove-artist-btn"
             >
               Delete
             </div>

@@ -22,12 +22,8 @@ function MovieDetails() {
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
+  const [errors, setErrors] = useState([])
   const allGenres = mylocation.state.genres
-
-  useEffect(() => {
-    fetchMovie()
-    fetcArtists('')
-  }, [])
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
       .then((res) => res.json())
@@ -63,6 +59,11 @@ function MovieDetails() {
     fetcArtists(searchKey.split(' ').join('+'))
   }
 
+  useEffect(() => {
+    fetchMovie()
+    fetcArtists('')
+  }, [])
+
   //Yeni artist ekleyince delete artist butonu initial olarak bu artiste hidden olarak geliyor.
   //Ancak artistleri duzenleme modundayken ekliyoruz ve duzenleme modundayken her artistin uzerinde
   // delete butonu olmali. Bu yuzden artist eklememize dependent olan bir effect ile yeni gelen
@@ -89,13 +90,28 @@ function MovieDetails() {
     title.focus()
   }
   function updateMovie() {
-    axios.patch(`/movies/${currentMovieId}`, {
-      title: title,
-      description: description,
-      posterPath: posterPath,
-      relatedArtistsIds: selectedArtists.map((a) => a.id),
-      relatedGenresIds: selectedGenres.map((g) => g.id),
-    })
+    axios
+      .patch(`/movies/${currentMovieId}`, {
+        title: title,
+        description: description,
+        posterPath: posterPath,
+        relatedArtistsIds: selectedArtists.map((a) => a.id),
+        relatedGenresIds: selectedGenres.map((g) => g.id),
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          return
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setErrors(err.response.data.messages.errors.map((e) => e.message))
+          errors.forEach((element) => {
+            console.log(element)
+          })
+          openCloseErrorPannel()
+        }
+      })
   }
 
   function deleteMovie() {
@@ -116,6 +132,7 @@ function MovieDetails() {
     removeArtistbtns.forEach((element) => {
       element.classList.toggle('hidden-remove-artist-btn')
     })
+    fetchMovie()
   }, [editMode])
 
   function openCloseArtistPannel() {
@@ -126,8 +143,24 @@ function MovieDetails() {
     deleteBtn.classList.toggle('nonclickable')
     pannel.classList.toggle('hidden-artist-pannel')
   }
+  function openCloseErrorPannel() {
+    const errorPannel = document.querySelector('.md-error-pannel')
+    const editBtn = document.querySelector('.edit-btn')
+    const addArtistBtn = document.querySelector('.add-artist')
+    errorPannel.classList.toggle('md-hidden-error-pannel')
+    editBtn.classList.toggle('inactive')
+    addArtistBtn.classList.toggle('inactive')
+  }
   return (
     <>
+      <div className="md-error-pannel md-hidden-error-pannel">
+        {errors.map((e) => (
+          <p className="md-warning-row">{e}</p>
+        ))}
+        <div className="md-close-error-pannel-btn" onClick={openCloseErrorPannel}>
+          Okay
+        </div>
+      </div>
       <div
         className="fake-details-body"
         style={{ backgroundImage: `url(${currentMovie.posterPath})` }}
@@ -193,8 +226,11 @@ function MovieDetails() {
                 selectedArtists={selectedArtists}
                 setSelectedArtists={setSelectedArtists}
               />
-              <div className="artist add-artist hidden-add-btn">
-                <div className="artist-photo" onClick={openCloseArtistPannel}></div>
+              <div className="add-artist hidden-add-btn">
+                <div className="remove-artist-btn-container hidden">
+                  <div className="remove-artist-btn hidden-remove-artist-btn">Delete</div>
+                </div>
+                <div className="add-artist-photo" onClick={openCloseArtistPannel}></div>
                 <p className="artist-name"> ADD </p>
               </div>
             </div>

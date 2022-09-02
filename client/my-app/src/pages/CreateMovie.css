@@ -30,7 +30,7 @@
   transform: translate(-50%, -50%);
   color: white;
   font-size: 1.4rem;
-  border-radius: 12px;
+  border-radius: 4 px;
 }
 .warning-row {
   margin-bottom: 20px;
@@ -113,13 +113,14 @@
 }
 .cm-remove-artist-btn {
   height: 100%;
-  width: 80%;
+  width: 70%;
   padding: 2px 4px;
   text-align: center;
   border-radius: 12px;
-  background-color: rgba(64, 64, 64, 0.6);
+  background-color: gray;
   transition: all 0.2s;
   cursor: pointer;
+  color: white;
 }
 .cm-remove-artist-btn:hover {
   background-color: tomato;
@@ -156,9 +157,8 @@
 }
 .cm-artist-pannel {
   position: fixed;
-  width: 40%;
-  max-width: 1000px;
-  max-height: 500px;
+  min-width: 40vw;
+  height: 60vh;
   top: 50%;
   left: 50%;
   border-radius: 8px;
@@ -174,7 +174,9 @@
   display: none;
 }
 .cm-hidden-artist-pannel {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
 }
 .cm-search-artist-bar-container {
   display: flex;
@@ -188,6 +190,7 @@
 .cm-search-artist-bar {
   margin-top: 20px;
   min-height: 40px;
+  /* min-width: 200px; */
   width: 100%;
   max-width: 300px;
   border: none;
@@ -199,20 +202,24 @@
   font-size: 20px;
   transition: all 0.2s;
 }
-
+.cm-search-artist-btn,
+.cm-cancel-btn {
+  /* max-width: 20px; */
+}
 .cm-search-artist-btn:hover {
   background-color: #ffffff;
   color: black;
 }
 .cm-search-artist-button-container {
   margin-top: 20px;
-  width: 80%;
+  width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
 .cm-search-artist-btn {
-  min-width: 120px;
+  /* min-width: 100px; */
+  padding: 10px;
   height: 40px;
   border: none;
   border-radius: 20px;
@@ -226,7 +233,9 @@
 }
 
 .cm-cancel-btn {
-  min-width: 120px;
+  /* min-width: 100px; */
+  padding: 10px 20px;
+
   height: 40px;
   border: none;
   border-radius: 20px;
@@ -318,8 +327,9 @@
     font-size: 1.4rem;
     margin: 0.2em 0.2em;
   }
-  .cm-search-artist-bar-container {
-    flex-direction: row;
+
+  .cm-search-artist-btn {
+    /* width: 20%; */
   }
   .cm-genres-pannel {
     margin-bottom: 4rem;
@@ -328,16 +338,24 @@
     margin: 0 0 4rem 0;
   }
   .cm-search-artist-button-container {
-    min-width: 270px;
+    min-width: 220px;
     width: 30%;
     justify-content: space-around;
   }
   .cm-search-artist-bar {
     max-width: none;
-    width: 60%;
+    width: 90%;
   }
 }
 @media screen and (min-width: 1200px) {
+  .cm-search-artist-bar-container {
+    padding: 0 8px;
+  }
+  .cm-search-artist-button-container {
+    min-width: 180px;
+    width: 30%;
+    justify-content: space-around;
+  }
   .cm-body h2 {
     margin: 0 0 4rem 0;
     font-size: 2em;
@@ -347,6 +365,9 @@
   }
   .cm-body {
     padding: 6rem;
+  }
+  .cm-search-artist-bar-container {
+    flex-direction: row;
   }
   #cm-inputs-container {
     display: flex;

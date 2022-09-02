@@ -11,7 +11,9 @@ function Movies(props) {
             <div
               key={m.id}
               onClick={() => {
-                navigate('/details', { state: { movie: m, genres: props.genres } })
+                navigate('/details', {
+                  state: { movie: m, genres: props.genres },
+                })
               }}
               className="film-card"
             >

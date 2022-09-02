@@ -177,9 +177,15 @@ export default class MoviesController {
     }
   }
 
-  public async updateMovie({ request }: HttpContextContract) {
+  public async updateMovie({ request, response }: HttpContextContract) {
     try {
-      const payload = await request.validate({ schema: movieValidator.movieSchema })
+      const payload = await request.validate({
+        schema: movieValidator.movieSchema,
+        messages: {
+          minLength: 'The {{field}} must have {{options.minLength}} or more characters',
+          required: 'The {{field}} is required',
+        },
+      })
       const movieToBeUpdated = await Movie.find(request.param('movieId'))
       movieToBeUpdated!.merge({
         title: payload.title,
@@ -190,7 +196,7 @@ export default class MoviesController {
       await movieToBeUpdated?.related('genres').sync(request.body().relatedGenresIds)
       movieToBeUpdated!.save()
     } catch (err) {
-      return err
+      response.status(400).json(err)
     }
   }
 }
