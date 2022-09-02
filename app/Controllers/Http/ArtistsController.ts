@@ -7,13 +7,6 @@ const ARTIST_SEARCH_BASE_URL =
   'https://api.themoviedb.org/3/search/person?api_key=d54de950ca880b236aa90854632983ca&query='
 
 export default class ArtistsController {
-  public async createArtist({ request }: HttpContextContract) {
-    const payload = await request.validate({ schema: artistValidator.artistSchema })
-    const artist = new Artist()
-    artist.$attributes = { ...payload }
-    await artist.save()
-  }
-
   public async alreadyAdded(tmdbartist): Promise<boolean> {
     const targetArtist = await Artist.findBy('tmdb_id', tmdbartist.id)
     if (targetArtist) {
@@ -100,14 +93,5 @@ export default class ArtistsController {
     } catch (err) {
       response.json(err)
     }
-  }
-
-  public async getSingleArtist({}: HttpContextContract) {
-    // try {
-    //   const artist = await Artist.find(request.param('artistId'))
-    //   response.json(artist)
-    // } catch (err) {
-    //   return err
-    // }
   }
 }

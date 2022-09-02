@@ -33,8 +33,6 @@ Route.post('/movies', 'MoviesController.createMovie')
 Route.patch('movies/:movieId', 'MoviesController.updateMovie')
 Route.delete('movies/:movieId', 'MoviesController.deleteMovie')
 
-Route.post('/artists', 'ArtistsController.createArtist')
 Route.get('/artists/:search?', 'ArtistsController.getArtists')
-Route.get('/artist/:artistId', 'ArtistsController.getSingleArtist')
 
 Route.get('/genres', 'GenresController.getGenres')
