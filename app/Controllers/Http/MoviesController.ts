@@ -84,42 +84,49 @@ export default class MoviesController {
 
   public async FetchIfNotEnough() {
     let pageNumber = 1
-    let totalMovieNumber = await (await Movie.all()).length
-    console.log(totalMovieNumber)
-
+    let totalMovieNumber = (await Movie.all()).length
     while (totalMovieNumber < 72) {
-      let currentPage
-      await fetch(
-        `https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${pageNumber}&with_watch_monetization_types=flatrate`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          currentPage = data.results
-          console.log(currentPage)
-        })
-      currentPage.forEach(async (element) => {
-        console.log(element.genre_ids)
-
-        if (!((await this.alreadyAdded(element)) || (await this.isDeleted(element.id)))) {
-          console.log('conditions are okay')
-
-          let movie = new Movie()
-          movie.merge({
-            title: element.title,
-            tmdbId: element.id,
-            description: element.overview,
-            posterPath: 'https://image.tmdb.org/t/p/w500' + element.poster_path,
+      try {
+        let currentPage
+        await fetch(
+          `https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${pageNumber}&with_watch_monetization_types=flatrate`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            currentPage = data.results
           })
-          await movie.save()
-          await movie.related('genres').sync(element.genre_ids)
-        }
-      })
-      pageNumber++
+        currentPage.forEach(async (element) => {
+          if (!(await this.alreadyAdded(element)) && !(await this.isDeleted(element.id))) {
+            console.log('conditions are okay')
+            let movie = new Movie()
+            movie.merge({
+              title: element.title,
+              tmdbId: element.id,
+              description: element.overview,
+              posterPath: 'https://image.tmdb.org/t/p/w500' + element.poster_path,
+            })
+
+            await movie.save().then(() => {
+              totalMovieNumber++
+            })
+            console.log(element)
+            console.log(element.genre_ids)
+            element.genre_ids.forEach(async (gId) => {
+              await movie.related('genres').attach([gId])
+            })
+            // await movie.related('genres').sync(element.genre_ids) CAUSES DEADLOCK ?
+          }
+        })
+        pageNumber++
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
-
   public async getMovies({ request, response }: HttpContextContract) {
-    this.FetchIfNotEnough()
+    await this.FetchIfNotEnough()
+    let totalMovieNumber = (await Movie.all()).length
+    console.log(totalMovieNumber)
     let allMovies
     try {
       const queryString = request.param('search')
@@ -135,6 +142,7 @@ export default class MoviesController {
         .preload('genres')
         .preload('artists')
         .limit(72)
+        .orderBy('id', 'desc')
 
       response.json(allMovies)
     } catch (err) {
