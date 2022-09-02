@@ -25,7 +25,7 @@ function Movies(props) {
         <div className="film-container">
           <div className=" no-such-movie">
             <img></img>
-            <h2>No results.</h2>
+            <h2>No results</h2>
           </div>
         </div>
       </div>

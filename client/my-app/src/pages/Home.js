@@ -29,7 +29,7 @@ function Home() {
   }, [])
 
   const searchMovies = (e) => {
-    fetchMovies(searchKey.replace(' ', '+'))
+    fetchMovies(searchKey.split(' ').join('+'))
   }
 
   const showCategories = () => {

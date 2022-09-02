@@ -82,22 +82,25 @@ export default class MoviesController {
     }
   }
 
-  // public async getMoviesFromTMDBAPI() {
-  //   //Most 20 popular movie from TMDB
-  //   let movies
-  //   await fetch(
-  //     'https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate'
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data)
-  //       movies = data.results
-  //     })
-  //   return movies
-  // }
+  public async getMoviesFromTMDBAPI() {
+    //Most 20 popular movie from TMDB
+    let movies
+    await fetch(
+      'https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate'
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        movies = data.results
+      })
+    return movies
+  }
 
   public async getMovies({ request, response }: HttpContextContract) {
     let allMovies
+    if ((await (await Movie.all()).length) < 20) {
+      // Movie.createMany()
+    }
     try {
       const queryString = request.param('search')
       const searchString: string = queryString ? queryString.split('+').join(' ') : ''
@@ -111,6 +114,7 @@ export default class MoviesController {
         .where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
         .preload('genres')
         .preload('artists')
+        .limit(42)
 
       response.json(allMovies)
     } catch (err) {
@@ -130,9 +134,16 @@ export default class MoviesController {
     }
   }
 
-  public async createMovie({ request }: HttpContextContract) {
+  public async createMovie({ request, response }: HttpContextContract) {
     try {
-      const payload = await request.validate({ schema: movieValidator.movieSchema })
+      const payload = await request.validate({
+        schema: movieValidator.movieSchema,
+        messages: {
+          required: 'The {{field}} is required',
+          minLength: 'The {{field}} must have {{options.minLength}} or more characters',
+          url: 'The poster must be a valid url',
+        },
+      })
       const movie = new Movie()
       movie.merge({
         title: payload.title,
@@ -142,7 +153,10 @@ export default class MoviesController {
       await movie.save()
       await movie.related('artists').sync(request.body().artistsIds)
       await movie.related('genres').sync(request.body().genresIds)
+      response.status(200)
     } catch (err) {
+      console.log(err.messages)
+      response.status(400).json(err)
       return err
     }
   }

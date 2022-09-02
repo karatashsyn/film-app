@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './CreateMovie.css'
 
@@ -12,35 +12,50 @@ function CreateMovie() {
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
-  const [saved, setSaved] = useState(false)
   const [allGenres, setAllGenres] = useState([])
+  const [errors, setErrors] = useState([])
 
-  function inputChecker() {
-    const warnings = []
-    if (title.length < 2) {
-      warnings.push('Title must contain 2 or more characters.')
-    }
-    if (description.length < 12) {
-      warnings.push('Description must contain 12 or more characters.')
-    }
+  function openCloseErrorPannel() {
+    const errorPannel = document.querySelector('.error-pannel')
+    const saveBtn = document.querySelector('.cm-save-movie-button')
+    const addArtistBtn = document.querySelector('.cm-add-artist')
+    errorPannel.classList.toggle('hidden-error-pannel')
+    saveBtn.classList.toggle('inactive')
+    addArtistBtn.classList.toggle('inactive')
   }
 
   function createMovie() {
-    axios.post('/movies', {
-      title: title,
-      description: description,
-      posterPath: posterPath,
-      artistsIds: selectedArtists.map((a) => a.id),
-      genresIds: selectedGenres.map((g) => g.id),
-    })
+    try {
+      axios
+        .post('/movies', {
+          title: title,
+          description: description,
+          posterPath: posterPath,
+          artistsIds: selectedArtists.map((a) => a.id),
+          genresIds: selectedGenres.map((g) => g.id),
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            window.location.replace('/')
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 400) {
+            setErrors(err.response.data.messages.errors.map((e) => e.message))
+            errors.forEach((element) => {
+              console.log(element)
+            })
+            openCloseErrorPannel()
+          }
+        })
+    } catch (err) {
+      console.log(err)
+    }
   }
+
   function openCloseArtistPannel() {
     const pannel = document.querySelector('.cm-artist-pannel')
-    if (pannel.classList.contains('cm-hidden-artist-pannel')) {
-      pannel.classList.remove('cm-hidden-artist-pannel')
-    } else {
-      pannel.classList.toggle('cm-hidden-artist-pannel')
-    }
+    pannel.classList.toggle('cm-hidden-artist-pannel')
   }
 
   function alreadyContains(listToBeChecked, elementToBeChecked) {
@@ -90,12 +105,16 @@ function CreateMovie() {
     })
   }, [artistAdded])
 
-  useEffect(() => {
-    createMovie()
-  }, [saved])
-
   return (
     <>
+      <div className="error-pannel hidden-error-pannel">
+        {errors.map((e) => (
+          <p className="warning-row">{e}</p>
+        ))}
+        <div className="close-error-pannel-btn" onClick={openCloseErrorPannel}>
+          Okay
+        </div>
+      </div>
       <div className="cm-body">
         <div className="cm-splitter">
           <div className="cm-container" id="cm-inputs-container">
@@ -185,13 +204,15 @@ function CreateMovie() {
           </div>
         </div>
         <div className="cm-container" id="cm-buttons-container">
-          <Link
-            onClick={() => setSaved(!saved)}
+          <div
+            onClick={() => {
+              createMovie()
+            }}
             className="cm-save-movie-button"
             to={{ pathname: '/' }}
           >
             Save
-          </Link>
+          </div>
 
           <Link to={{ pathname: '/' }} className="cm-cancel-process-button">
             {' '}

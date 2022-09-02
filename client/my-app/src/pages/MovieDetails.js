@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import './MovieDetails.css'
+import PannelArtists from '../components/PannelArtists'
+import CastArtists from '../components/CastArtists'
+import GenreBox from '../components/GenresBox'
 const TMDB_NULL_IMG_URL = 'https://image.tmdb.org/t/p/w500null'
 const NULL_IMG_PLACE_HOLDER = 'https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE'
 function MovieDetails() {
@@ -174,25 +177,11 @@ function MovieDetails() {
               </div>
               <div className="genres-text">{genresText}</div>
               <div className="genres-pannel hidden-genres-pannel">
-                {allGenres.map((g) => (
-                  <div
-                    className="genre-box"
-                    onClick={() => {
-                      if (!selectedGenres.map((e) => e.id).includes(g.id)) {
-                        setSelectedGenres([...selectedGenres, g])
-                      } else {
-                        setSelectedGenres(selectedGenres.filter((item) => item.id !== g.id))
-                      }
-                    }}
-                    style={{
-                      backgroundColor: selectedGenres.map((e) => e.id).includes(g.id)
-                        ? '#0587ff'
-                        : 'rgb(64,64,64)',
-                    }}
-                  >
-                    {g.name}
-                  </div>
-                ))}
+                <GenreBox
+                  allGenres={allGenres}
+                  selectedGenres={selectedGenres}
+                  setSelectedGenres={setSelectedGenres}
+                />
               </div>
               <div className="description-block">
                 <textarea
@@ -207,34 +196,16 @@ function MovieDetails() {
               </div>
             </div>
             <div className="cast">
-              {selectedArtists.map((e) => (
-                <div className="artist">
-                  <div className="remove-artist-btn-container">
-                    <div
-                      onClick={() => {
-                        setSelectedArtists(selectedArtists.filter((item) => item.id !== e.id))
-                      }}
-                      className="remove-artist-btn hidden-remove-artist-btn"
-                    >
-                      Delete
-                    </div>
-                  </div>
-
-                  <Link to={{ pathname: `/artist/${e.id}` }}>
-                    <div
-                      className="artist-photo"
-                      style={{ backgroundImage: `url(${e.profile_path})` }}
-                    ></div>
-                  </Link>
-                  <p className="artist-name">{e.name}</p>
-                </div>
-              ))}
-
+              <CastArtists
+                selectedArtists={selectedArtists}
+                setSelectedArtists={setSelectedArtists}
+              />
               <div className="artist add-artist hidden-add-btn">
                 <div className="remove-artist-btn-container">
                   <img
-                    src="https://cdn.iconscout.com/icon/free/png-256/x-7-100307.png"
+                    alt="Add artist button"
                     className="fake-remove-artist-btn"
+                    src="https://cdn.iconscout.com/icon/free/png-256/x-7-100307.png"
                   ></img>
                 </div>
 
@@ -261,39 +232,13 @@ function MovieDetails() {
                   </button>
                 </div>
               </div>
-              <>
-                {searchedArtists.length >= 1 ? (
-                  searchedArtists.map((a) => (
-                    <div>
-                      <div className="artist-container">
-                        <div
-                          onClick={() => {
-                            if (!selectedArtists.map((artist) => artist.id).includes(a.id)) {
-                              setSelectedArtists([...selectedArtists, a])
-                            }
-                            setArtistAdded(!artistAdded)
-                          }}
-                          className="artist-box"
-                          style={{
-                            pointerEvents: selectedArtists.map((artist) => artist.id).includes(a.id)
-                              ? 'none'
-                              : 'auto',
-                          }}
-                        >
-                          <h3>
-                            {selectedArtists.map((artist) => artist.id).includes(a.id)
-                              ? `✔️  ${a.name}  `
-                              : `${a.name}`}
-                          </h3>
-                          <img className="artist-box-image" src={a.profile_path}></img>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="no-result">No Result</div>
-                )}
-              </>
+              <PannelArtists
+                searchedArtists={searchedArtists}
+                selectedArtists={selectedArtists}
+                setSelectedArtists={setSelectedArtists}
+                artistAdded={artistAdded}
+                setArtistAdded={setArtistAdded}
+              />
             </div>
           </div>
         </div>
