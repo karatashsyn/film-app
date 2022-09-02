@@ -82,25 +82,45 @@ export default class MoviesController {
     }
   }
 
-  public async getMoviesFromTMDBAPI() {
-    //Most 20 popular movie from TMDB
-    let movies
-    await fetch(
-      'https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate'
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        movies = data.results
+  public async FetchIfNotEnough() {
+    let pageNumber = 1
+    let totalMovieNumber = await (await Movie.all()).length
+    console.log(totalMovieNumber)
+
+    while (totalMovieNumber < 72) {
+      let currentPage
+      await fetch(
+        `https://api.themoviedb.org/3/discover/movie?api_key=d54de950ca880b236aa90854632983ca&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${pageNumber}&with_watch_monetization_types=flatrate`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          currentPage = data.results
+          console.log(currentPage)
+        })
+      currentPage.forEach(async (element) => {
+        console.log(element.genre_ids)
+
+        if (!((await this.alreadyAdded(element)) || (await this.isDeleted(element.id)))) {
+          console.log('conditions are okay')
+
+          let movie = new Movie()
+          movie.merge({
+            title: element.title,
+            tmdbId: element.id,
+            description: element.overview,
+            posterPath: 'https://image.tmdb.org/t/p/w500' + element.poster_path,
+          })
+          await movie.save()
+          await movie.related('genres').sync(element.genre_ids)
+        }
       })
-    return movies
+      pageNumber++
+    }
   }
 
   public async getMovies({ request, response }: HttpContextContract) {
+    this.FetchIfNotEnough()
     let allMovies
-    if ((await (await Movie.all()).length) < 20) {
-      // Movie.createMany()
-    }
     try {
       const queryString = request.param('search')
       const searchString: string = queryString ? queryString.split('+').join(' ') : ''
@@ -114,7 +134,7 @@ export default class MoviesController {
         .where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
         .preload('genres')
         .preload('artists')
-        .limit(42)
+        .limit(72)
 
       response.json(allMovies)
     } catch (err) {

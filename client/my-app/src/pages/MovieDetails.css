@@ -403,7 +403,7 @@
 }
 .md-error-pannel {
   z-index: 999;
-  padding: 2rem;
+  padding: 2rem 4rem 0.6rem 4rem;
   padding-bottom: 0.6rem;
   height: fit-content;
   max-width: 96vw;
@@ -414,12 +414,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
-  font-size: 1.4rem;
+  font-size: 1rem;
   border-radius: 4px;
 }
 .md-warning-row {
   margin-bottom: 20px;
-  color: #ff6347;
+  color: #ffa647;
 }
 .md-close-error-pannel-btn {
   height: 40px;
@@ -429,14 +429,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(112, 112, 112);
+  background-color: rgb(80, 80, 80);
   margin: auto;
   cursor: pointer;
-  transition: all 0.1s;
 }
 .md-close-error-pannel-btn:hover {
-  background-color: #ffffff;
-  color: black;
+  background-color: #000000;
 }
 .md-hidden-error-pannel {
   display: none;
