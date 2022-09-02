@@ -8,7 +8,14 @@ function Home() {
   const [movies, setmovies] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [categories, setCategories] = useState([])
-
+  const [presentArtists, setPresentArtists] = useState([])
+  const fetcArtists = async (queryString) => {
+    fetch(`/artists/${queryString}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setPresentArtists(data)
+      })
+  }
   const fetchMovies = async (searchString) => {
     fetch(`/movies/${searchString}`)
       .then((res) => res.json())
@@ -27,6 +34,7 @@ function Home() {
   useEffect(() => {
     fetcGenres()
     fetchMovies(searchKey)
+    fetcArtists('')
   }, [])
 
   const searchMovies = (e) => {
@@ -84,7 +92,9 @@ function Home() {
             <div
               className="add-movie-link"
               onClick={() => {
-                navigate('/createmovie', { state: { genres: categories } })
+                navigate('/createmovie', {
+                  state: { genres: categories, presentArtists: presentArtists },
+                })
               }}
             >
               <div className="pannel-add-movie-button btn">Add</div>
@@ -117,7 +127,9 @@ function Home() {
             <div
               className="add-movie-link"
               onClick={() => {
-                navigate('/createmovie', { state: { genres: categories } })
+                navigate('/createmovie', {
+                  state: { genres: categories, presentArtists: presentArtists },
+                })
               }}
             >
               <div className="add-movie-button">Add</div>

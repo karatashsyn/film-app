@@ -13,7 +13,8 @@ function CreateMovie() {
   const [description, setDescription] = useState('')
   const [posterPath, setPosterPath] = useState('')
   const [selectedGenres, setSelectedGenres] = useState([])
-  const [searchedArtists, setSearchedArtists] = useState([])
+  console.log(myLocation.state)
+  const [searchedArtists, setSearchedArtists] = useState(myLocation.state.presentArtists)
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
@@ -82,9 +83,9 @@ function CreateMovie() {
     fetcArtists(searchKey.split(' ').join('+'))
   }
 
-  useEffect(() => {
-    fetcArtists('')
-  }, [])
+  // useEffect(() => {
+  //   fetcArtists('')
+  // }, [])
 
   //Yeni artist ekleyince delete artist butonu initial olarak bu artiste hidden olarak geliyor.
   //Ancak artistleri duzenleme modundayken ekliyoruz ve duzenleme modundayken her artistin uzerinde

@@ -23,6 +23,11 @@ function MovieDetails() {
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
   const allGenres = mylocation.state.genres
+
+  useEffect(() => {
+    fetchMovie()
+    fetcArtists('')
+  }, [])
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
       .then((res) => res.json())
@@ -57,10 +62,6 @@ function MovieDetails() {
   const searchArtists = () => {
     fetcArtists(searchKey.split(' ').join('+'))
   }
-
-  useEffect(() => {
-    fetcArtists('')
-  }, [])
 
   //Yeni artist ekleyince delete artist butonu initial olarak bu artiste hidden olarak geliyor.
   //Ancak artistleri duzenleme modundayken ekliyoruz ve duzenleme modundayken her artistin uzerinde
@@ -115,7 +116,6 @@ function MovieDetails() {
     removeArtistbtns.forEach((element) => {
       element.classList.toggle('hidden-remove-artist-btn')
     })
-    fetchMovie()
   }, [editMode])
 
   function openCloseArtistPannel() {
@@ -194,14 +194,6 @@ function MovieDetails() {
                 setSelectedArtists={setSelectedArtists}
               />
               <div className="artist add-artist hidden-add-btn">
-                <div className="remove-artist-btn-container">
-                  <img
-                    alt="Add artist button"
-                    className="fake-remove-artist-btn"
-                    src="https://cdn.iconscout.com/icon/free/png-256/x-7-100307.png"
-                  ></img>
-                </div>
-
                 <div className="artist-photo" onClick={openCloseArtistPannel}></div>
                 <p className="artist-name"> ADD </p>
               </div>
