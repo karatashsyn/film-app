@@ -109,6 +109,7 @@ function MovieDetails() {
           errors.forEach((element) => {
             console.log(element)
           })
+          fetchMovie()
           openCloseErrorPannel()
         }
       })
