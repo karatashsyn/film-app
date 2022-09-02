@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './CreateMovie.css'
 import CmCastArtists from '../components/CmCastArtists'
@@ -7,6 +7,8 @@ import CmPannelArtists from '../components/CmPannelArtists'
 import CmGenreBox from '../components/CmGenreBox'
 
 function CreateMovie() {
+  const myLocation = useLocation()
+  console.log(myLocation.state)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [posterPath, setPosterPath] = useState('')
@@ -15,7 +17,7 @@ function CreateMovie() {
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
-  const [allGenres, setAllGenres] = useState([])
+  const allGenres = myLocation.state.genres
   const [errors, setErrors] = useState([])
 
   function openCloseErrorPannel() {
@@ -68,14 +70,6 @@ function CreateMovie() {
     return false
   }
 
-  const fetchGenres = async () => {
-    fetch('/genres')
-      .then((res) => res.json())
-      .then((data) => {
-        setAllGenres(data)
-      })
-  }
-
   const fetcArtists = async (queryString) => {
     fetch(`/artists/${queryString}`)
       .then((res) => res.json())
@@ -89,7 +83,6 @@ function CreateMovie() {
   }
 
   useEffect(() => {
-    fetchGenres()
     fetcArtists('')
   }, [])
 

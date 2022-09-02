@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import './MovieDetails.css'
 import PannelArtists from '../components/MdPannelArtists'
@@ -7,20 +7,22 @@ import CastArtists from '../components/MdCastArtists'
 import GenreBox from '../components/MdGenresBox'
 const TMDB_NULL_IMG_URL = 'https://image.tmdb.org/t/p/w500null'
 const NULL_IMG_PLACE_HOLDER = 'https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE'
+
 function MovieDetails() {
-  const currentMovieId = useParams().movieId
-  const [currentMovie, setCurrentMovie] = useState({})
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+  const mylocation = useLocation()
+  const currentMovieId = mylocation.state.movie.id
+  const [currentMovie, setCurrentMovie] = useState(mylocation.state.movie)
+  const [title, setTitle] = useState(currentMovie.title)
+  const [description, setDescription] = useState(currentMovie.description)
   const [editMode, setEditMode] = useState(false)
-  const [posterPath, setPosterPath] = useState()
-  const [selectedGenres, setSelectedGenres] = useState([])
-  const [genresText, setGenresText] = useState('')
+  const [posterPath, setPosterPath] = useState('')
+  const [selectedGenres, setSelectedGenres] = useState(currentMovie.genres)
+  const [genresText, setGenresText] = useState(selectedGenres.map((e) => e.name).join(', '))
   const [searchedArtists, setSearchedArtists] = useState([])
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
-  const [allGenres, setAllGenres] = useState([])
+  const allGenres = mylocation.state.genres
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
       .then((res) => res.json())
@@ -40,14 +42,6 @@ function MovieDetails() {
         console.log(err)
       })
   }
-  const fetchGenres = async () => {
-    fetch('/genres')
-      .then((res) => res.json())
-      .then((data) => {
-        setAllGenres(data)
-      })
-  }
-
   const fetcArtists = async (queryString) => {
     fetch(`/artists/${queryString}`)
       .then((res) => res.json())
@@ -65,8 +59,6 @@ function MovieDetails() {
   }
 
   useEffect(() => {
-    fetchGenres()
-    fetchMovie()
     fetcArtists('')
   }, [])
 
@@ -87,7 +79,7 @@ function MovieDetails() {
     const title = document.querySelector('.title')
     const description = document.querySelector('.description-text')
     title.readOnly = !editMode
-    description.readOnly = !editBtn
+    description.readOnly = !editMode
     if (editMode) {
       editBtn.innerHTML = 'Save'
     } else {
@@ -123,6 +115,7 @@ function MovieDetails() {
     removeArtistbtns.forEach((element) => {
       element.classList.toggle('hidden-remove-artist-btn')
     })
+    fetchMovie()
   }, [editMode])
 
   function openCloseArtistPannel() {

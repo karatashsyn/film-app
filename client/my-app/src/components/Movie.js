@@ -1,20 +1,27 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 const baseImageUrl = 'https://image.tmdb.org/t/p/w500'
 
 function Movies(props) {
+  const navigate = useNavigate()
   if (props.movies.length >= 1) {
     return (
       <div>
         <div className="film-container">
           {props.movies.map((m) => (
-            <Link to={{ pathname: `/details/${m.id}`, state: { movie: m } }} className="film-card">
+            <div
+              key={m.id}
+              onClick={() => {
+                navigate('/details', { state: { movie: m, genres: props.genres } })
+              }}
+              className="film-card"
+            >
               {m.poster_path === 'https://image.tmdb.org/t/p/w500null' ? (
                 <img src="https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE"></img>
               ) : (
                 <img src={m.poster_path}></img>
               )}
               <h2 key={m.id}>{m.title}</h2>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

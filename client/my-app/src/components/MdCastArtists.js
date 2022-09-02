@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 function CastArtists({ selectedArtists, setSelectedArtists }) {
+  const navigate = useNavigate()
   return (
     <>
       {selectedArtists.map((e) => (
@@ -15,12 +16,16 @@ function CastArtists({ selectedArtists, setSelectedArtists }) {
             </div>
           </div>
 
-          <Link to={{ pathname: `/artist/${e.id}` }}>
+          <div
+            onClick={() => {
+              navigate('/artist', { state: { artist: e } })
+            }}
+          >
             <div
               className="artist-photo"
               style={{ backgroundImage: `url(${e.profile_path})` }}
             ></div>
-          </Link>
+          </div>
           <p className="artist-name">{e.name}</p>
         </div>
       ))}

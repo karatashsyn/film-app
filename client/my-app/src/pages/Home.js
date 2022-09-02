@@ -1,9 +1,10 @@
 import Movies from './../components/Movie'
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Home.css'
 
 function Home() {
+  const navigate = useNavigate()
   const [movies, setmovies] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [categories, setCategories] = useState([])
@@ -80,9 +81,14 @@ function Home() {
             <div className="pannel-all-movies-btn btn" onClick={bringAll}>
               All
             </div>
-            <Link className="add-movie-link" to={{ pathname: '/createmovie' }}>
+            <div
+              className="add-movie-link"
+              onClick={() => {
+                navigate('/createmovie', { state: { genres: categories } })
+              }}
+            >
               <div className="pannel-add-movie-button btn">Add</div>
-            </Link>
+            </div>
             <div
               className="pannel-categories-button btn"
               onClick={() => {
@@ -108,9 +114,14 @@ function Home() {
               All
             </div>
 
-            <Link className="add-movie-link" to={{ pathname: '/createmovie' }}>
+            <div
+              className="add-movie-link"
+              onClick={() => {
+                navigate('/createmovie', { state: { genres: categories } })
+              }}
+            >
               <div className="add-movie-button">Add</div>
-            </Link>
+            </div>
           </div>
 
           <input
@@ -142,7 +153,7 @@ function Home() {
         </div>
 
         <div onClick={hideButtonsPannel}>
-          <Movies movies={movies} />
+          <Movies movies={movies} genres={categories} />
         </div>
       </div>
     </div>
