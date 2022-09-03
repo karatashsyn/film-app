@@ -114,7 +114,7 @@ export default class MoviesController {
             element.genre_ids.forEach(async (gId) => {
               await movie.related('genres').attach([gId])
             })
-            // await movie.related('genres').sync(element.genre_ids) CAUSES DEADLOCK ?
+            // await movie.related('genres').sync(element.genre_ids) CAUSES DEADLOCK/ ASK ABOUT THIS ?
           }
         })
         pageNumber++

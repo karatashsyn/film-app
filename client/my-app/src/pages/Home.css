@@ -254,9 +254,11 @@ body {
 }
 
 .film-container {
+  padding-top: 40px;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  /* margin-top: ; */
 }
 
 .film-card {
@@ -287,17 +289,17 @@ body {
 
 .film-card img {
   /* max-width: 200px; */
-  transition: all 0.2s;
+  transition: all 0.14s;
   overflow: hidden;
   border-radius: 4px;
 }
 
 h2 {
   color: white;
-  transition: all 0.2s;
+  transition: all 0.14s;
 }
 .film-card:hover img {
-  transform: scale(1.08);
+  transform: scale(1.1);
   border-radius: 16px;
 }
 
