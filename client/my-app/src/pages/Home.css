@@ -255,6 +255,7 @@ body {
 
 .film-container {
   padding-top: 40px;
+  padding-top: 4 0px;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
