@@ -4,7 +4,7 @@
  * Feel free to let us know via PR, if you find something broken in this config
  * file.
  */
-
+import { Application } from '@adonisjs/application/build/src/Application'
 import Env from '@ioc:Adonis/Core/Env'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
@@ -33,23 +33,17 @@ const databaseConfig: DatabaseConfig = {
     | npm i mysql
     |
     */
-    mysql: {
-      client: 'mysql',
+    sqlite: {
+      client: 'sqlite',
       connection: {
-        host: Env.get('MYSQL_HOST'),
-        port: Env.get('MYSQL_PORT'),
-        user: Env.get('MYSQL_USER'),
-        password: Env.get('MYSQL_PASSWORD', ''),
-        database: Env.get('MYSQL_DB_NAME'),
+        filename: Application.tmpPath('db.sqlite3'),
       },
-      migrations: {
-        naturalSort: true,
-      },
+      migrations: { naturalSort: true },
+      useNullAsDefault: true,
       healthCheck: false,
       debug: false,
     },
-
-  }
+  },
 }
 
 export default databaseConfig
