@@ -32,7 +32,6 @@ Route.get('/movie/:movieId', 'MoviesController.getSingleMovie')
 Route.post('/movies', 'MoviesController.createMovie')
 Route.patch('movies/:movieId', 'MoviesController.updateMovie')
 Route.delete('movies/:movieId', 'MoviesController.deleteMovie')
-
 Route.get('/artists/:search?', 'ArtistsController.getArtists')
-
 Route.get('/genres', 'GenresController.getGenres')
+Route.get('/addorupdategenres', 'GenresController.addTMDBGenresToMyDB')

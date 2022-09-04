@@ -3,8 +3,12 @@ import Home from './pages/Home'
 import MovieDetails from './pages/MovieDetails'
 import ArtistDetails from './pages/ArtistDetails'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import axios from 'axios'
 import CreateMovie from './pages/CreateMovie'
+
 function App() {
+  axios.get('/addorupdategenres')
+  console.log(axios.get('/addorupdategenres'))
   return (
     <Router>
       <div className="App">

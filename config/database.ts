@@ -4,7 +4,7 @@
  * Feel free to let us know via PR, if you find something broken in this config
  * file.
  */
-import { Application } from '@adonisjs/application/build/src/Application'
+import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
@@ -31,6 +31,7 @@ const databaseConfig: DatabaseConfig = {
     | from npm when using this connection
     |
     | npm i mysql
+    
     |
     */
     sqlite: {

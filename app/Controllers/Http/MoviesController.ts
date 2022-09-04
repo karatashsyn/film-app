@@ -3,6 +3,7 @@ import { movieValidator } from 'App/utils/movieValidator'
 import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
 import DeletedMovie from 'App/Models/DeletedMovie'
+import axios from 'axios'
 const TMDB_SEARCH_MOVIE_BASE_URL =
   'https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query='
 
@@ -127,6 +128,7 @@ export default class MoviesController {
     await this.FetchIfNotEnough()
     let totalMovieNumber = (await Movie.all()).length
     console.log(totalMovieNumber)
+    console.log(totalMovieNumber)
     let allMovies
     try {
       const queryString = request.param('search')
@@ -138,7 +140,7 @@ export default class MoviesController {
         await this.addSingleMovieFromTMDB(queryString)
       }
       allMovies = await Movie.query()
-        .where('title', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
+        .where('title', 'like', `%${searchString}%`)
         .preload('genres')
         .preload('artists')
         .limit(72)

@@ -87,8 +87,7 @@ export default class ArtistsController {
         console.log(`Searching for artist ${queryString} in TMDB API`)
         await this.addSingleArtistFromTMDB(queryString)
       }
-      allArtists = await Artist.query().where('name', 'REGEXP', `[a-zA-Z]*${searchString}[a-zA-Z]*`)
-
+      allArtists = await Artist.query().where('name', 'like', `%${searchString}%`)
       return allArtists
     } catch (err) {
       response.json(err)
