@@ -20,8 +20,8 @@ export default class Movie extends BaseModel {
   @column()
   public posterPath: string
 
-  // @hasMany(() => MovieArtist)
-  // public movieArtists: HasMany<typeof MovieArtist>
+  @column()
+  public genreIds: Array<number>
 
   @manyToMany(() => Genre, {
     localKey: 'id',

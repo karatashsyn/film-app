@@ -1,10 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom'
-function GenreBox({ allGenres, selectedGenres, setSelectedGenres }) {
+import { Link } from 'react-router-dom'
+function CmGenreBox({ allGenres, selectedGenres, setSelectedGenres, isCmPage }) {
   return (
     <>
       {allGenres.map((g) => (
         <div
-          className="genre-box"
+          className={isCmPage ? 'cm-genre-box' : 'genre-box'}
           onClick={() => {
             if (!selectedGenres.map((e) => e.id).includes(g.id)) {
               setSelectedGenres([...selectedGenres, g])
@@ -24,4 +24,4 @@ function GenreBox({ allGenres, selectedGenres, setSelectedGenres }) {
     </>
   )
 }
-export default GenreBox
+export default CmGenreBox

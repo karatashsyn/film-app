@@ -217,10 +217,9 @@
   transition: 0.4s;
   cursor: pointer;
   animation-duration: 3s;
-  color: black;
 }
 .save-btn:hover {
-  background-color: #38dc64;
+  /* background-color: #83ffa4; */
 }
 .nonclickable {
   pointer-events: none;
@@ -273,7 +272,7 @@
 }
 .genre-box {
   margin: 4px;
-  padding: 2px 8px 2px 8px;
+  padding: 2px 8px 4px 8px;
   height: 24px;
   width: max-content;
   display: flex;
@@ -407,13 +406,12 @@
   padding-bottom: 0.6rem;
   height: fit-content;
   max-width: 96vw;
-  background: rgb(56, 56, 56, 0.8);
+  background: rgba(208, 134, 134, 0.8);
   backdrop-filter: blur(200px);
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
   font-size: 1rem;
   border-radius: 4px;
 }
@@ -432,6 +430,7 @@
   background-color: rgb(80, 80, 80);
   margin: auto;
   cursor: pointer;
+  color: white;
 }
 .md-close-error-pannel-btn:hover {
   background-color: #000000;

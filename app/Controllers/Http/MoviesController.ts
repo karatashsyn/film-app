@@ -4,6 +4,7 @@ import Movie from 'App/Models/Movie'
 import fetch from 'node-fetch'
 import DeletedMovie from 'App/Models/DeletedMovie'
 import axios from 'axios'
+import Genre from 'App/Models/Genre'
 const TMDB_SEARCH_MOVIE_BASE_URL =
   'https://api.themoviedb.org/3/search/movie?api_key=d54de950ca880b236aa90854632983ca&query='
 
@@ -11,7 +12,7 @@ export default class MoviesController {
   public async alreadyAdded(tmdbmovie): Promise<boolean> {
     const targetMovie = await Movie.findBy('tmdb_id', tmdbmovie.id)
     if (targetMovie) {
-      console.log('You already have a movie with the same TMDB id ')
+      console.log('You already have  a movie with the same TMDB id ')
       return true
     } else {
       console.log('This is not added')
@@ -74,6 +75,10 @@ export default class MoviesController {
           await movieToBeAdded.save()
           Movie.$getRelation('genres')?.boot()
           await movieToBeAdded.related('genres').sync(TMDBMovieGenreIds)
+          // TMDBMovieGenreIds.forEach(async (id) => {
+          //   const currentGenre = await Genre.find(id)
+          //   currentGenre?.related('movies').sync([movieToBeAdded.id])
+          // })
           return movieToBeAdded.$attributes
         }
       }
@@ -86,7 +91,7 @@ export default class MoviesController {
   public async FetchIfNotEnough() {
     let pageNumber = 1
     let totalMovieNumber = (await Movie.all()).length
-    while (totalMovieNumber < 72) {
+    while (totalMovieNumber < 20) {
       try {
         let currentPage
         await fetch(
@@ -110,8 +115,6 @@ export default class MoviesController {
             await movie.save().then(() => {
               totalMovieNumber++
             })
-            console.log(element)
-            console.log(element.genre_ids)
             element.genre_ids.forEach(async (gId) => {
               await movie.related('genres').attach([gId])
             })
@@ -143,7 +146,7 @@ export default class MoviesController {
         .where('title', 'like', `%${searchString}%`)
         .preload('genres')
         .preload('artists')
-        .limit(72)
+        .limit(36)
         .orderBy('id', 'desc')
 
       response.json(allMovies)

@@ -1,6 +1,6 @@
 import Movies from './../components/Movie'
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './Home.css'
 
 function Home() {
@@ -9,6 +9,11 @@ function Home() {
   const [searchKey, setSearchKey] = useState('')
   const [categories, setCategories] = useState([])
   const [presentArtists, setPresentArtists] = useState([])
+  const [categoriesListClassName, setCategoriesListClassName] = useState('')
+  const [hidden, setHidden] = useState('hidden-buttons-pannel')
+  const [pannelCategoriesClas, setPannelCategoriesClass] = useState(
+    'hidden-pannel-categories-container'
+  )
   const fetcArtists = async (queryString) => {
     fetch(`/artists/${queryString}`)
       .then((res) => res.json())
@@ -42,40 +47,33 @@ function Home() {
   }
 
   const showCategories = () => {
-    const categoriesList = document.querySelector('.categories')
-    categoriesList.classList.toggle('active')
+    setCategoriesListClassName('active ')
   }
   const hideCategories = () => {
-    const categoriesList = document.querySelector('.categories')
-    categoriesList.classList.remove('active')
+    setCategoriesListClassName('')
   }
 
   const bringAll = () => {
     fetchMovies('')
   }
   const showHideButtonsPannel = () => {
-    const pannel = document.querySelector('.buttons-pannel')
-    pannel.classList.toggle('hidden-buttons-pannel')
+    hidden === '' ? setHidden('hidden-buttons-pannel') : setHidden('')
   }
   const hideButtonsPannel = () => {
-    const pannel = document.querySelector('.buttons-pannel')
-    pannel.classList.add('hidden-buttons-pannel')
+    setHidden('hidden-buttons-pannel')
   }
   const showHidePannelCategories = () => {
-    const pannelCategories = document.querySelector('.pannel-categories-container')
-    const pannelCategoriesBtn = document.querySelector('.pannel-categories-button')
-
-    pannelCategories.classList.toggle('hidden-pannel-categories-container')
-    pannelCategoriesBtn.classList.toggle('activated')
+    setPannelCategoriesClass(
+      pannelCategoriesClas === '' ? 'hidden-pannel-categories-container' : ''
+    )
   }
   // After we increased the width of the window. We should close the button-pannels. So I used the way below
   let widthMatch = window.matchMedia('(min-width: 564px)')
   widthMatch.addEventListener('change', () => {
     console.log('changed')
     if (widthMatch.matches) {
-      const pannel = document.querySelector('.buttons-pannel')
-      if (!pannel.classList.contains('hidden-buttons-pannel')) {
-        pannel.classList.add('hidden-buttons-pannel')
+      if (hidden === '') {
+        setHidden('hidden-buttons-pannel')
       }
     }
   })
@@ -85,7 +83,7 @@ function Home() {
       <div className="home-body">
         <div className="nav">
           <div className="buttons-pannel-icon" onClick={showHideButtonsPannel}></div>
-          <div className="buttons-pannel hidden-buttons-pannel">
+          <div className={`${hidden} buttons-pannel`}>
             <div className="pannel-all-movies-btn btn" onClick={bringAll}>
               All
             </div>
@@ -107,7 +105,7 @@ function Home() {
             >
               Categories
             </div>
-            <div className="pannel-categories-container hidden-pannel-categories-container ">
+            <div className={`pannel-categories-container ${pannelCategoriesClas}`}>
               {categories.map((c) => (
                 <div className="pannel-category-box" key={c.id}>
                   {c.name}
@@ -155,7 +153,7 @@ function Home() {
           </button>
         </div>
         <div>
-          <div onMouseLeave={hideCategories} className="categories">
+          <div onMouseLeave={hideCategories} className={`${categoriesListClassName}categories`}>
             {categories.map((c) => (
               <div className="category-box" key={c.id}>
                 {c.name}

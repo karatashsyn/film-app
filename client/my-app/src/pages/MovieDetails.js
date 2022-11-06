@@ -4,7 +4,7 @@ import axios from 'axios'
 import './MovieDetails.css'
 import PannelArtists from '../components/MdPannelArtists'
 import CastArtists from '../components/MdCastArtists'
-import GenreBox from '../components/MdGenresBox'
+import GenreBox from '../components/GenreBox'
 const TMDB_NULL_IMG_URL = 'https://image.tmdb.org/t/p/w500null'
 const NULL_IMG_PLACE_HOLDER = 'https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE'
 
@@ -23,6 +23,8 @@ function MovieDetails() {
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
   const [errors, setErrors] = useState([])
+  const [errorPannelAppeared, setErrorPannelAppeared] = useState(false)
+  const [artistPannelAppeared, setArtistPannelAppeared] = useState(false)
   const allGenres = mylocation.state.genres
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
@@ -64,31 +66,6 @@ function MovieDetails() {
     fetcArtists('')
   }, [])
 
-  //Yeni artist ekleyince delete artist butonu initial olarak bu artiste hidden olarak geliyor.
-  //Ancak artistleri duzenleme modundayken ekliyoruz ve duzenleme modundayken her artistin uzerinde
-  // delete butonu olmali. Bu yuzden artist eklememize dependent olan bir effect ile yeni gelen
-  // artistlerin de uzerinde delete butonu olmasini asagidaki effectle sagliyoruz.
-
-  useEffect(() => {
-    const removeArtistbtns = Array.from(document.getElementsByClassName('remove-artist-btn'))
-    removeArtistbtns.forEach((element) => {
-      element.classList.remove('hidden-remove-artist-btn')
-    })
-  }, [artistAdded])
-
-  function changeReadonlyAndInnerTexts() {
-    const editBtn = document.querySelector('.edit-btn')
-    const title = document.querySelector('.title')
-    const description = document.querySelector('.description-text')
-    title.readOnly = !editMode
-    description.readOnly = !editMode
-    if (editMode) {
-      editBtn.innerHTML = 'Save'
-    } else {
-      editBtn.innerHTML = 'Edit'
-    }
-    title.focus()
-  }
   function updateMovie() {
     axios
       .patch(`/movies/${currentMovieId}`, {
@@ -119,42 +96,16 @@ function MovieDetails() {
     axios.delete(`/movies/${currentMovieId}`)
   }
 
-  useEffect(() => {
-    changeReadonlyAndInnerTexts()
-    const editBtn = document.querySelector('.edit-btn')
-    const deleteBtn = document.querySelector('.delete-btn')
-    const addArtistBtn = document.querySelector('.add-artist')
-    const genresPannel = document.querySelector('.genres-pannel')
-    const removeArtistbtns = Array.from(document.getElementsByClassName('remove-artist-btn'))
-    editBtn.classList.toggle('save-btn')
-    deleteBtn.classList.toggle('inactive-delete-movie')
-    addArtistBtn.classList.toggle('hidden-add-btn')
-    genresPannel.classList.toggle('hidden-genres-pannel')
-    removeArtistbtns.forEach((element) => {
-      element.classList.toggle('hidden-remove-artist-btn')
-    })
-    // fetchMovie()
-  }, [editMode])
-
   function openCloseArtistPannel() {
-    const saveBtn = document.querySelector('.edit-btn')
-    const deleteBtn = document.querySelector('.delete-btn')
-    const pannel = document.querySelector('.artist-pannel')
-    saveBtn.classList.toggle('nonclickable')
-    deleteBtn.classList.toggle('nonclickable')
-    pannel.classList.toggle('hidden-artist-pannel')
+    setArtistPannelAppeared((prev) => !prev)
   }
+
   function openCloseErrorPannel() {
-    const errorPannel = document.querySelector('.md-error-pannel')
-    const editBtn = document.querySelector('.edit-btn')
-    const addArtistBtn = document.querySelector('.add-artist')
-    errorPannel.classList.toggle('md-hidden-error-pannel')
-    editBtn.classList.toggle('inactive')
-    addArtistBtn.classList.toggle('inactive')
+    setErrorPannelAppeared((prev) => !prev)
   }
   return (
     <>
-      <div className="md-error-pannel md-hidden-error-pannel">
+      <div className={`md-error-pannel ${!errorPannelAppeared && 'md-hidden-error-pannel'}`}>
         {errors.map((e) => (
           <p className="md-warning-row">{e}</p>
         ))}
@@ -173,7 +124,7 @@ function MovieDetails() {
             <div className="except-cast">
               <div className="first-row">
                 <input
-                  readOnly={true}
+                  readOnly={!editMode}
                   onChange={(e) => {
                     setTitle(e.target.value)
                   }}
@@ -189,25 +140,30 @@ function MovieDetails() {
                       }
                       setEditMode(!editMode)
                     }}
-                    className="edit-btn"
+                    className={`edit-btn ${errorPannelAppeared && 'inactive'} ${
+                      artistPannelAppeared && 'nonclickable'
+                    }  ${editMode && 'save-btn'}`}
                   >
-                    Edit
+                    {editMode ? 'Save' : 'Edit'}
                   </div>
                   <Link
                     to={{ pathname: '/' }}
                     onClick={deleteMovie}
-                    className="delete-btn inactive-delete-movie"
+                    className={`delete-btn ${!editMode && 'inactive-delete-movie '} ${
+                      artistPannelAppeared && 'nonclickable'
+                    }`}
                   >
                     <div></div>
                   </Link>
                 </div>
               </div>
               <div className="genres-text">{genresText}</div>
-              <div className="genres-pannel hidden-genres-pannel">
+              <div className={`genres-pannel ${!editMode && 'hidden-genres-pannel'}`}>
                 <GenreBox
                   allGenres={allGenres}
                   selectedGenres={selectedGenres}
                   setSelectedGenres={setSelectedGenres}
+                  isCmPage={false}
                 />
               </div>
               <div className="description-block">
@@ -215,7 +171,7 @@ function MovieDetails() {
                   onChange={(e) => {
                     setDescription(e.target.value)
                   }}
-                  readOnly={true}
+                  readOnly={!editMode}
                   spellCheck="false"
                   className="description-text"
                   value={description}
@@ -226,8 +182,9 @@ function MovieDetails() {
               <CastArtists
                 selectedArtists={selectedArtists}
                 setSelectedArtists={setSelectedArtists}
+                editMode={editMode}
               />
-              <div className="add-artist hidden-add-btn">
+              <div className={`add-artist ${!editMode && 'hidden-add-btn'}`}>
                 <div className="remove-artist-btn-container hidden">
                   <div className="remove-artist-btn hidden-remove-artist-btn">Delete</div>
                 </div>
@@ -235,7 +192,7 @@ function MovieDetails() {
                 <p className="artist-name"> ADD </p>
               </div>
             </div>
-            <div className="artist-pannel hidden-artist-pannel">
+            <div className={`artist-pannel ${!artistPannelAppeared && 'hidden-artist-pannel'}`}>
               <div className="search-artist-bar-container">
                 <input
                   placeholder="Search for artist"

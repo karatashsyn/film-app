@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-function CastArtists({ selectedArtists, setSelectedArtists }) {
+function CastArtists({ selectedArtists, setSelectedArtists, editMode }) {
   const navigate = useNavigate()
   return (
     <>
@@ -10,7 +10,9 @@ function CastArtists({ selectedArtists, setSelectedArtists }) {
               onClick={() => {
                 setSelectedArtists(selectedArtists.filter((item) => item.id !== e.id))
               }}
-              className="remove-artist-btn hidden-remove-artist-btn"
+              className={
+                editMode ? 'remove-artist-btn' : 'remove-artist-btn hidden-remove-artist-btn'
+              }
             >
               Delete
             </div>

@@ -4,7 +4,7 @@ import axios from 'axios'
 import './CreateMovie.css'
 import CmCastArtists from '../components/CmCastArtists'
 import CmPannelArtists from '../components/CmPannelArtists'
-import CmGenreBox from '../components/CmGenreBox'
+import CmGenreBox from '../components/GenreBox'
 
 function CreateMovie() {
   const myLocation = useLocation()
@@ -13,21 +13,25 @@ function CreateMovie() {
   const [description, setDescription] = useState('')
   const [posterPath, setPosterPath] = useState('')
   const [selectedGenres, setSelectedGenres] = useState([])
-  console.log(myLocation.state)
   const [searchedArtists, setSearchedArtists] = useState(myLocation.state.presentArtists)
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
   const allGenres = myLocation.state.genres
   const [errors, setErrors] = useState([])
+  const [errorPannelHidden, setErrorPannelHidden] = useState('hidden-error-pannel')
+  const [saveBtnActive, setSaveBtnActive] = useState('')
+  const [addArtistBtnActive, setAddArtistBtnActive] = useState('')
+  const [hiddenArtistPannel, setHiddenArtistPannel] = useState('cm-hidden-artist-pannel')
 
   function openCloseErrorPannel() {
-    const errorPannel = document.querySelector('.error-pannel')
-    const saveBtn = document.querySelector('.cm-save-movie-button')
-    const addArtistBtn = document.querySelector('.cm-add-artist')
-    errorPannel.classList.toggle('hidden-error-pannel')
-    saveBtn.classList.toggle('inactive')
-    addArtistBtn.classList.toggle('inactive')
+    errorPannelHidden === ''
+      ? setErrorPannelHidden('hidden-error-pannel')
+      : setErrorPannelHidden('')
+
+    saveBtnActive === '' ? setSaveBtnActive('inactive') : setSaveBtnActive('')
+
+    addArtistBtnActive === '' ? setAddArtistBtnActive('inactive') : setAddArtistBtnActive('')
   }
 
   function createMovie() {
@@ -60,8 +64,9 @@ function CreateMovie() {
   }
 
   function openCloseArtistPannel() {
-    const pannel = document.querySelector('.cm-artist-pannel')
-    pannel.classList.toggle('cm-hidden-artist-pannel')
+    hiddenArtistPannel === ''
+      ? setHiddenArtistPannel('cm-hidden-artist-pannel')
+      : setHiddenArtistPannel('')
   }
 
   function alreadyContains(listToBeChecked, elementToBeChecked) {
@@ -80,12 +85,14 @@ function CreateMovie() {
   }
 
   const searchArtists = () => {
-    fetcArtists(searchKey.split(' ').join('+'))
+    if (searchKey !== '') {
+      fetcArtists(searchKey.split(' ').join('+'))
+    }
   }
 
   return (
     <>
-      <div className="error-pannel hidden-error-pannel">
+      <div className={`error-pannel ${errorPannelHidden}`}>
         {errors.map((e) => (
           <p className="warning-row">{e}</p>
         ))}
@@ -133,6 +140,7 @@ function CreateMovie() {
                 selectedGenres={selectedGenres}
                 setSelectedGenres={setSelectedGenres}
                 alreadyContains={alreadyContains}
+                isCmPage={true}
               />
             </div>
             <h2>Cast</h2>
@@ -142,7 +150,10 @@ function CreateMovie() {
                 setSelectedArtists={setSelectedArtists}
               />
 
-              <div className="cm-artist cm-add-artist " onClick={openCloseArtistPannel}>
+              <div
+                className={`cm-artist cm-add-artist ${addArtistBtnActive}`}
+                onClick={openCloseArtistPannel}
+              >
                 <div className="cm-remove-artist-btn-container cm-fake-remove-artist-btn-container">
                   {/* <div className="cm-remove-artist-btn">Delete</div> */}
                 </div>
@@ -156,7 +167,7 @@ function CreateMovie() {
             onClick={() => {
               createMovie()
             }}
-            className="cm-save-movie-button"
+            className={`cm-save-movie-button ${saveBtnActive}`}
             to={{ pathname: '/' }}
           >
             Save
@@ -168,7 +179,7 @@ function CreateMovie() {
           </Link>
         </div>
 
-        <div className="cm-artist-pannel cm-hidden-artist-pannel">
+        <div className={`cm-artist-pannel ${hiddenArtistPannel}`}>
           <div className="cm-search-artist-bar-container">
             <input
               placeholder="Search for artist"
