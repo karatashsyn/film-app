@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import './MovieDetails.css'
 import PannelArtists from '../components/MdPannelArtists'
 import CastArtists from '../components/MdCastArtists'
 import GenreBox from '../components/GenreBox'
+import { relatedDataActions } from '../store/index'
 const TMDB_NULL_IMG_URL = 'https://image.tmdb.org/t/p/w500null'
 const NULL_IMG_PLACE_HOLDER = 'https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE'
 
 function MovieDetails() {
+  const presentArtists = useSelector((state) => state.relatedData.allArtists)
+  const allGenres = useSelector((state) => state.relatedData.allGenres)
   const mylocation = useLocation()
   const currentMovieId = mylocation.state.movie.id
   const [currentMovie, setCurrentMovie] = useState(mylocation.state.movie)
@@ -18,14 +22,15 @@ function MovieDetails() {
   const [posterPath, setPosterPath] = useState('')
   const [selectedGenres, setSelectedGenres] = useState(currentMovie.genres)
   const [genresText, setGenresText] = useState(selectedGenres.map((e) => e.name).join(', '))
-  const [searchedArtists, setSearchedArtists] = useState([])
+  const [searchedArtists, setSearchedArtists] = useState(presentArtists)
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
   const [errors, setErrors] = useState([])
   const [errorPannelAppeared, setErrorPannelAppeared] = useState(false)
   const [artistPannelAppeared, setArtistPannelAppeared] = useState(false)
-  const allGenres = mylocation.state.genres
+  const dispatch = useDispatch()
+
   const fetchMovie = async () => {
     fetch(`/movie/${currentMovieId}`)
       .then((res) => res.json())
@@ -45,25 +50,35 @@ function MovieDetails() {
         console.log(err)
       })
   }
-  const fetcArtists = async (queryString) => {
-    fetch(`/artists/${queryString}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSearchedArtists(data)
-      })
-  }
 
-  useEffect(() => {
-    setGenresText(selectedGenres.map((e) => `${e.name}`).join(', '))
-  }, [selectedGenres])
+  const fetcArtists = async (queryString) => {
+    if (queryString === '') {
+      setSearchedArtists(presentArtists)
+    } else {
+      fetch(`/artists/${queryString}`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(relatedDataActions.updateArtists([...presentArtists, ...data]))
+          setSearchedArtists(data)
+        })
+    }
+  }
 
   const searchArtists = () => {
     fetcArtists(searchKey.split(' ').join('+'))
   }
+  useEffect(() => {
+    setGenresText(selectedGenres.map((e) => `${e.name}`).join(', '))
+  }, [selectedGenres])
+
+  useEffect(() => {
+    if (searchKey === '') {
+      setSearchedArtists(presentArtists)
+    }
+  }, [presentArtists, searchKey])
 
   useEffect(() => {
     fetchMovie()
-    fetcArtists('')
   }, [])
 
   function updateMovie() {

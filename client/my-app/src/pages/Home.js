@@ -9,11 +9,9 @@ function Home() {
   const [searchKey, setSearchKey] = useState('')
   const [categories, setCategories] = useState([])
   const [presentArtists, setPresentArtists] = useState([])
-  const [categoriesListClassName, setCategoriesListClassName] = useState('')
-  const [hidden, setHidden] = useState('hidden-buttons-pannel')
-  const [pannelCategoriesClas, setPannelCategoriesClass] = useState(
-    'hidden-pannel-categories-container'
-  )
+  const [categoriesAppeared, setCategoriesAppeared] = useState(false)
+  const [buttonsPannelAppeared, setButtonsPannelAppeared] = useState(false)
+  const [pannelCategoriesAppeared, setPannelCategoriesAppeared] = useState(false)
   const fetcArtists = async (queryString) => {
     fetch(`/artists/${queryString}`)
       .then((res) => res.json())
@@ -36,44 +34,41 @@ function Home() {
         setCategories(data)
       })
   }
-  useEffect(() => {
-    fetcGenres()
-    fetchMovies(searchKey)
-    fetcArtists('')
-  }, [])
 
   const searchMovies = (e) => {
     fetchMovies(searchKey.split(' ').join('+'))
   }
 
-  const showCategories = () => {
-    setCategoriesListClassName('active ')
-  }
-  const hideCategories = () => {
-    setCategoriesListClassName('')
+  const showHideCategories = () => {
+    //active
+    setCategoriesAppeared((prev) => !prev)
   }
 
   const bringAll = () => {
     fetchMovies('')
   }
+
   const showHideButtonsPannel = () => {
-    hidden === '' ? setHidden('hidden-buttons-pannel') : setHidden('')
+    //hidden-buttons-pannel
+    setButtonsPannelAppeared((prev) => !prev)
   }
-  const hideButtonsPannel = () => {
-    setHidden('hidden-buttons-pannel')
-  }
+
   const showHidePannelCategories = () => {
-    setPannelCategoriesClass(
-      pannelCategoriesClas === '' ? 'hidden-pannel-categories-container' : ''
-    )
+    setPannelCategoriesAppeared((prev) => !prev)
   }
+
+  useEffect(() => {
+    fetcGenres()
+    fetchMovies(searchKey)
+    fetcArtists('')
+  }, [])
   // After we increased the width of the window. We should close the button-pannels. So I used the way below
   let widthMatch = window.matchMedia('(min-width: 564px)')
   widthMatch.addEventListener('change', () => {
     console.log('changed')
     if (widthMatch.matches) {
-      if (hidden === '') {
-        setHidden('hidden-buttons-pannel')
+      if (buttonsPannelAppeared) {
+        setButtonsPannelAppeared(false)
       }
     }
   })
@@ -83,7 +78,7 @@ function Home() {
       <div className="home-body">
         <div className="nav">
           <div className="buttons-pannel-icon" onClick={showHideButtonsPannel}></div>
-          <div className={`${hidden} buttons-pannel`}>
+          <div className={`buttons-pannel ${!buttonsPannelAppeared && 'hidden-buttons-pannel'}`}>
             <div className="pannel-all-movies-btn btn" onClick={bringAll}>
               All
             </div>
@@ -105,7 +100,11 @@ function Home() {
             >
               Categories
             </div>
-            <div className={`pannel-categories-container ${pannelCategoriesClas}`}>
+            <div
+              className={`pannel-categories-container ${
+                !pannelCategoriesAppeared && 'hidden-pannel-categories-container'
+              }`}
+            >
               {categories.map((c) => (
                 <div className="pannel-category-box" key={c.id}>
                   {c.name}
@@ -115,7 +114,7 @@ function Home() {
           </div>
 
           <div className="nav-buttons-container">
-            <div className="categories-button" onMouseOver={showCategories}>
+            <div className="categories-button" onMouseOver={showHideCategories}>
               Categories
             </div>
             <div className="all-movies-btn" onClick={bringAll}>
@@ -140,12 +139,12 @@ function Home() {
             onChange={(e) => {
               setSearchKey(e.target.value)
             }}
-            onClick={hideButtonsPannel}
+            onClick={showHideButtonsPannel}
           ></input>
           <button
             className="search-btn"
             onClick={() => {
-              hideButtonsPannel()
+              showHideButtonsPannel()
               searchMovies()
             }}
           >
@@ -153,7 +152,10 @@ function Home() {
           </button>
         </div>
         <div>
-          <div onMouseLeave={hideCategories} className={`${categoriesListClassName}categories`}>
+          <div
+            onMouseLeave={showHideCategories}
+            className={`categories ${categoriesAppeared && 'active'}`}
+          >
             {categories.map((c) => (
               <div className="category-box" key={c.id}>
                 {c.name}
@@ -162,7 +164,7 @@ function Home() {
           </div>
         </div>
 
-        <div onClick={hideButtonsPannel}>
+        <div onClick={showHideButtonsPannel}>
           <Movies movies={movies} genres={categories} />
         </div>
       </div>

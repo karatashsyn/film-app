@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import './ArtistDetails.css'
 
 function ArtistDetails() {
   const mylocation = useLocation()
-  const currentArtistId = mylocation.state.artist.id
   const currentArtist = mylocation.state.artist
 
   return (

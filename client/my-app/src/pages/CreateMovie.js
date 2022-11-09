@@ -1,37 +1,35 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import './CreateMovie.css'
 import CmCastArtists from '../components/CmCastArtists'
 import CmPannelArtists from '../components/CmPannelArtists'
 import CmGenreBox from '../components/GenreBox'
+import { relatedDataActions } from '../store'
 
 function CreateMovie() {
-  const myLocation = useLocation()
-  console.log(myLocation.state)
+  const presentArtists = useSelector((state) => state.relatedData.allArtists)
+  const dispatch = useDispatch()
+  const allGenres = useSelector((state) => state.relatedData.allGenres)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [posterPath, setPosterPath] = useState('')
   const [selectedGenres, setSelectedGenres] = useState([])
-  const [searchedArtists, setSearchedArtists] = useState(myLocation.state.presentArtists)
+  const [searchedArtists, setSearchedArtists] = useState(presentArtists)
   const [selectedArtists, setSelectedArtists] = useState([])
   const [searchKey, setSearchKey] = useState('')
   const [artistAdded, setArtistAdded] = useState(false)
-  const allGenres = myLocation.state.genres
   const [errors, setErrors] = useState([])
-  const [errorPannelHidden, setErrorPannelHidden] = useState('hidden-error-pannel')
-  const [saveBtnActive, setSaveBtnActive] = useState('')
-  const [addArtistBtnActive, setAddArtistBtnActive] = useState('')
-  const [hiddenArtistPannel, setHiddenArtistPannel] = useState('cm-hidden-artist-pannel')
+  const [errorPannelHidden, setErrorPannelHidden] = useState(true)
+  const [hiddenArtistPannel, setHiddenArtistPannel] = useState(true)
 
   function openCloseErrorPannel() {
-    errorPannelHidden === ''
-      ? setErrorPannelHidden('hidden-error-pannel')
-      : setErrorPannelHidden('')
+    setErrorPannelHidden((prev) => !prev)
+  }
 
-    saveBtnActive === '' ? setSaveBtnActive('inactive') : setSaveBtnActive('')
-
-    addArtistBtnActive === '' ? setAddArtistBtnActive('inactive') : setAddArtistBtnActive('')
+  function openCloseArtistPannel() {
+    setHiddenArtistPannel((prev) => !prev)
   }
 
   function createMovie() {
@@ -63,12 +61,6 @@ function CreateMovie() {
     }
   }
 
-  function openCloseArtistPannel() {
-    hiddenArtistPannel === ''
-      ? setHiddenArtistPannel('cm-hidden-artist-pannel')
-      : setHiddenArtistPannel('')
-  }
-
   function alreadyContains(listToBeChecked, elementToBeChecked) {
     if (listToBeChecked.map((e) => e.id).includes(elementToBeChecked.id)) {
       return true
@@ -76,23 +68,33 @@ function CreateMovie() {
     return false
   }
 
-  const fetcArtists = async (queryString) => {
-    fetch(`/artists/${queryString}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSearchedArtists(data)
-      })
-  }
-
-  const searchArtists = () => {
-    if (searchKey !== '') {
-      fetcArtists(searchKey.split(' ').join('+'))
+  const fetchArtists = async (queryString) => {
+    if (searchKey === '') {
+      fetchArtists(searchKey.split(' ').join('+'))
+      setSearchedArtists(presentArtists)
+    } else {
+      fetch(`/artists/${queryString}`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(relatedDataActions.updateArtists([...presentArtists, ...data]))
+          setSearchedArtists(data)
+        })
     }
   }
 
+  const searchArtists = () => {
+    fetchArtists(searchKey.split(' ').join('+'))
+  }
+
+  useEffect(() => {
+    if (searchKey === '') {
+      setSearchedArtists(presentArtists)
+    }
+  }, [presentArtists, searchKey])
+
   return (
     <>
-      <div className={`error-pannel ${errorPannelHidden}`}>
+      <div className={`error-pannel ${errorPannelHidden && 'hidden-error-pannel'}`}>
         {errors.map((e) => (
           <p className="warning-row">{e}</p>
         ))}
@@ -151,12 +153,10 @@ function CreateMovie() {
               />
 
               <div
-                className={`cm-artist cm-add-artist ${addArtistBtnActive}`}
+                className={`cm-artist cm-add-artist ${!errorPannelHidden && 'inactive'}`}
                 onClick={openCloseArtistPannel}
               >
-                <div className="cm-remove-artist-btn-container cm-fake-remove-artist-btn-container">
-                  {/* <div className="cm-remove-artist-btn">Delete</div> */}
-                </div>
+                <div className="cm-remove-artist-btn-container cm-fake-remove-artist-btn-container"></div>
                 <div className="cm-artist-photo cm-add-artist-photo"></div>
               </div>
             </div>
@@ -167,7 +167,7 @@ function CreateMovie() {
             onClick={() => {
               createMovie()
             }}
-            className={`cm-save-movie-button ${saveBtnActive}`}
+            className={`cm-save-movie-button ${!errorPannelHidden && 'inactive'}`}
             to={{ pathname: '/' }}
           >
             Save
@@ -179,8 +179,11 @@ function CreateMovie() {
           </Link>
         </div>
 
-        <div className={`cm-artist-pannel ${hiddenArtistPannel}`}>
+        <div className={`cm-artist-pannel ${hiddenArtistPannel && 'cm-hidden-artist-pannel'}`}>
           <div className="cm-search-artist-bar-container">
+            {/* <Route path="/"> */}
+            <div>Hellloooo</div>
+            {/* </Route> */}
             <input
               placeholder="Search for artist"
               className="cm-search-artist-bar"

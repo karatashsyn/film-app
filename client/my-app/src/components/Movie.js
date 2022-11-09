@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate, Router } from 'react-router-dom'
 const baseImageUrl = 'https://image.tmdb.org/t/p/w500'
 
 function Movies(props) {
@@ -17,7 +17,7 @@ function Movies(props) {
               }}
               className="film-card"
             >
-              {m.poster_path === 'https://image.tmdb.org/t/p/w500null' ? (
+              {m.poster_path === baseImageUrl ? (
                 <img src="https://via.placeholder.com/200x300/808080/ffffff.jpeg?text=NO+IMAGE"></img>
               ) : (
                 <img src={m.poster_path}></img>
