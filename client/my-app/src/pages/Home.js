@@ -39,18 +39,8 @@ function Home() {
     fetchMovies(searchKey.split(' ').join('+'))
   }
 
-  const showHideCategories = () => {
-    //active
-    setCategoriesAppeared((prev) => !prev)
-  }
-
   const bringAll = () => {
     fetchMovies('')
-  }
-
-  const showHideButtonsPannel = () => {
-    //hidden-buttons-pannel
-    setButtonsPannelAppeared((prev) => !prev)
   }
 
   const showHidePannelCategories = () => {
@@ -62,8 +52,19 @@ function Home() {
     fetchMovies(searchKey)
     fetcArtists('')
   }, [])
-  // After we increased the width of the window. We should close the button-pannels. So I used the way below
+
   let widthMatch = window.matchMedia('(min-width: 564px)')
+
+  const showHideCategories = () => {
+    setCategoriesAppeared((prev) => !prev)
+  }
+  const hideButtonsPannel = () => {
+    setButtonsPannelAppeared(false)
+  }
+  const showHideButtonsPannel = () => {
+    setButtonsPannelAppeared((prev) => !prev)
+  }
+  // After we increased the width of the window. We should close the button-pannels. So I used the way below
   widthMatch.addEventListener('change', () => {
     console.log('changed')
     if (widthMatch.matches) {
@@ -139,7 +140,7 @@ function Home() {
             onChange={(e) => {
               setSearchKey(e.target.value)
             }}
-            onClick={showHideButtonsPannel}
+            onClick={hideButtonsPannel}
           ></input>
           <button
             className="search-btn"
@@ -164,7 +165,7 @@ function Home() {
           </div>
         </div>
 
-        <div onClick={showHideButtonsPannel}>
+        <div onClick={hideButtonsPannel}>
           <Movies movies={movies} genres={categories} />
         </div>
       </div>
